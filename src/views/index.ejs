@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Inicio de sesión</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/stylesheets/all.min.css">
+  </head>
+  <style>
+#submitBtn:disabled {
+  background-color: #9ca3af; 
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+#submitBtn:not(:disabled) {
+  background-color: #3b82f6; 
+  cursor: pointer;
+}
+
+#submitBtn:not(:disabled):hover {
+  background-color: #2563eb; 
+}
+
+#submitBtn {
+  transition: background-color 0.3s ease;
+}
+  </style>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="container mx-auto px-4">
+        <form class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8" action="/login" method="POST">
+          <div class="mb-6">
+            <img src="/images/logo.jpg" alt="" class="w-32 h-32 mx-auto mb-4">
+          </div>
+            <div class="mb-4 relative">
+                <label class="block text-gray-700 text-sm font-semibold mb-2" for="email">
+                    Correo electrónico
+                </label>
+                <div class="relative">
+                    <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input 
+                        type="email" 
+                        id="email"
+                        class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="tucorreo@example.com"
+                        required
+                        name="email"
+                    >
+                </div>
+            </div>
+            <div class="mb-6 relative">
+                <label class="block text-gray-700 text-sm font-semibold mb-2" for="password">
+                    Contraseña
+                </label>
+                <div class="relative">
+                    <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <i class="fas fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-blue-500" 
+                       id="togglePassword"></i>
+                    <input 
+                        type="password" 
+                        id="password"
+                        class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="••••••••"
+                        required
+                        minlength="6"
+                        name="password"
+                    >
+                </div>
+            </div>
+            <div class="flex mb-6">
+                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">
+                    <i class="fas fa-key mr-1"></i>¿Olvidaste tu contraseña?
+                </a>
+            </div>
+            <button 
+                type="submit"
+                id="submitBtn"
+                class="w-full bg-blue-500 text-white py-2 px-4 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:cursor-not-allowed"
+                disabled
+            >
+                <i class="fas fa-sign-in-alt mr-2"></i>Ingresar
+            </button>
+
+        </form>
+    </div>
+
+    <script>
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const submitBtn = document.getElementById('submitBtn');
+        const togglePassword = document.getElementById('togglePassword');
+
+        // Validación de formulario
+        function validateForm() {
+            submitBtn.disabled = !(emailInput.checkValidity() && passwordInput.checkValidity());
+        }
+
+        // Toggle para mostrar/ocultar contraseña
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+            this.classList.toggle('fa-eye');
+        });
+
+        // Event listeners
+        emailInput.addEventListener('input', validateForm);
+        passwordInput.addEventListener('input', validateForm);
+    </script>
+</body>
+</html>
