@@ -10,7 +10,6 @@ const authenticateToken = (req, res, next) => {
     jwt.verify(token, "test", (err, user) => {
         if (err) return res.redirect('/panel');
         req.user = user;
-        console.log(user);
         next();
     });
 };

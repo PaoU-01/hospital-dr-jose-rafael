@@ -1,195 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Bienes</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <!-- Font Awesome Local -->
     <link rel="stylesheet" href="/stylesheets/all.min.css">
-
-    <style>
-        /* Estilos del modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #3b82f6;
-            color: white;
-            border-radius: 10px 10px 0 0;
-        }
-        
-        .modal-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 25px;
-        }
-        
-        .modal-footer {
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 1rem;
-            width: 100%;
-        }
-        
-        /* Estilos del formulario */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        
-        .form-group {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #374151;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px 12px 40px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .form-group textarea {
-            padding: .8rem 2rem 2rem .8rem;
-        }
-
-        .form-group .input-icon {
-            position: absolute;
-            left: 15px;
-            bottom: 15px;
-            color: #64748b;
-            font-size: 16px;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-        }
-        
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
-            border: none;
-        }
-        
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-        }
-        
-        .btn-secondary {
-            background: #f1f5f9;
-            color: #64748b;
-            border: 1px solid #e2e8f0;
-        }
-        
-        .btn-secondary:hover {
-            background: #e2e8f0;
-            transform: translateY(-1px);
-        }
-
-        .icon {
-            width: 20px;
-            text-align: center;
-        }
-
-    </style>
-
-
+    <link rel="stylesheet" href="/stylesheets/bienes.css">
 </head>
+
 <body class="bg-gray-50 min-h-screen">
     <div class="flex">
-        <!-- Sidebar -->
         <aside class="w-64 bg-gray-900 min-h-screen p-4 fixed">
             <div class="mb-6">
                 <img src="/images/logo-removebg-preview.png" alt="" class="w-28 h-28 mx-auto mb-4 yo">
-              </div>
-            
+            </div>
+
             <nav>
                 <ul class="space-y-2">
                     <li>
-                        <a href="/panel" class="flex items-center bg-blue-800 hover:text-white p-3 text-gray-300 hover:bg-blue-800 rounded-lg group active-menu">
+                        <a href="/panel"
+                            class="flex items-center bg-blue-800 hover:text-white p-3 text-gray-300 hover:bg-blue-800 rounded-lg group active-menu">
                             <i class="fas fa-box text-gray-400 group-hover:text-white mr-3"></i>
                             Bienes
                         </a>
                     </li>
                     <li>
-                        <a href="/departamentos" class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
+                        <a href="/departamentos"
+                            class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-building text-gray-400 group-hover:text-white mr-3"></i>
                             Departamentos
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                        <a href="#"
+                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-chart-bar text-gray-400 group-hover:text-white mr-3"></i>
                             Estadísticas
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                        <a href="#"
+                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
                             Bitácora
                         </a>
@@ -204,15 +57,18 @@
             <div class="flex justify-between items-center mb-8">
                 <div>
                     <p class="text-sm text-gray-500 mb-5">
-                        Bienvenido/a, 
-                        <span class="font-semibold text-blue-600"><%= nombre %></span>
+                        Bienvenido/a,
+                        <span class="font-semibold text-blue-600">
+                            <%= nombre %>
+                        </span>
                     </p>
                     <h1 class="text-2xl font-bold text-gray-800">
                         <i class="fas fa-cubes mr-2 text-blue-500"></i>
                         Gestión de Bienes
                     </h1>
                 </div>
-                <button onclick="openModal()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center mb-4">
+                <button onclick="openModal()"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center mb-4">
                     <i class="fas fa-plus-circle mr-2"></i>
                     Agregar un bien
                 </button>
@@ -226,49 +82,72 @@
                         <thead>
                             <tr class="text-left text-gray-600 border-b">
                                 <th class="pb-3">ID</th>
-                                <th class="pb-3">Concepto Movimiento</th>
-                                <th class="pb-3">Cantidad</th>
                                 <th class="pb-3">Nombre</th>
                                 <th class="pb-3">Marca</th>
                                 <th class="pb-3">Modelo</th>
+                                <th class="pb-3">Cantidad</th>
+                                <th class="pb-3">Observaciones</th>
+                                <th class="pb-3">Concepto Movimiento</th>
                                 <th class="pb-3">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Ejemplo de fila -->
-                            <tr class="border-b hover:bg-gray-50">
-                                <td>00022</td>  
-                                <td class="py-3">0</td>
-                                <td>1</td>
-                                <td>Silla</td>
-                                <td>Orion</td>
-                                <td>De oficina</td>
-                                <td>
-                                    <button class="text-blue-500 hover:text-blue-700 mr-3">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-red-500 hover:text-red-700">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- Otra fila -->
-                            <tr class="border-b hover:bg-gray-50">
-                                <td>0033</td>
-                                <td class="py-3">0</td>
-                                <td>1</td>
-                                <td>Escritorio</td>
-                                <td>Madera</td>
-                                <td>Sencillo</td>
-                                <td>
-                                    <button class="text-blue-500 hover:text-blue-700 mr-3">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-red-500 hover:text-red-700">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <% if (bienes.length> 0) { %>
+                                <% for (let i=0; i < bienes.length; i++) { %>
+                                    <tr class="border-b hover:bg-gray-50">
+                                        <td class="py-3">
+                                            <%= bienes[i].numero_identificacion %>
+                                        </td>
+                                        <td class="py-3">
+                                            <%= bienes[i].nombre %>
+                                        </td>
+                                        <td class="py-3">
+                                            <%= bienes[i].marca %>
+                                        </td>
+                                        <td class="py-3">
+                                            <%= bienes[i].modelo %>
+                                        </td>
+                                        <td class="py-3">
+                                            <%= bienes[i].cantidad %>
+                                        </td>
+                                        <td class="py-3">
+                                            <%= bienes[i].observaciones %>
+                                        </td>
+                                        <td class="py-3">
+                                            <%= bienes[i].concepto_movimiento %>
+                                        </td>
+                                        <td class="py-3">
+                                            <button onclick="openEditModal(
+                                          '<%= bienes[i].id %>',
+                                          '<%= bienes[i].nombre %>',
+                                          '<%= bienes[i].marca %>',
+                                          '<%= bienes[i].modelo %>',
+                                          '<%= bienes[i].grupo %>',
+                                          '<%= bienes[i].subgrupo %>',
+                                          '<%= bienes[i].numero_serie %>',
+                                          '<%= bienes[i].incorporaciones %>',
+                                          '<%= bienes[i].observaciones %>',
+                                          '<%= bienes[i].seccion %>',
+                                          '<%= bienes[i].concepto_movimiento %>',
+                                          '<%= bienes[i].cantidad %>',
+                                          '<%= bienes[i].numero_identificacion %>',
+                                          '<%= bienes[i].departamento %>'
+                                        )" class="text-blue-500 hover:text-blue-700 mr-2">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button onclick="confirmDelete('<%= bienes[i].id %>')"
+                                                class="text-red-500 hover:text-red-700">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                        <% } else { %>
+                                            <tr class="border-b hover:bg-gray-50">
+                                                <td colspan="7" class="py-3 text-center text-gray-500">No hay bienes
+                                                    registrados</td>
+                                            </tr>
+                                            <% } %>
                         </tbody>
                     </table>
                 </div>
@@ -312,13 +191,14 @@
                             <i class="fas fa-cube"></i>
                             Nuevo Bien
                         </h2>
-                        <button onclick="closeModal()" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;">
+                        <button onclick="closeModal()"
+                            style="background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    
+
                     <div class="modal-body">
-                        <form class="form-grid">
+                        <form class="form-grid" action="/bienes/agregar" method="POST" id="bienForm">
                             <!-- Sección 1 - Información General -->
                             <div class="form-group">
                                 <label>
@@ -327,10 +207,10 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-cube input-icon"></i>
-                                    <input type="text" required placeholder="Ingrese el nombre del bien">
+                                    <input type="text" name="nombre" required placeholder="Ingrese el nombre del bien">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>
                                     <i class="fas fa-certificate"></i>
@@ -338,10 +218,10 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-tag input-icon"></i>
-                                    <input type="text" required placeholder="Ingrese la marca">
+                                    <input type="text" name="marca" required placeholder="Ingrese la marca">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>
                                     <i class="fas fa-cog"></i>
@@ -349,10 +229,10 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-microchip input-icon"></i>
-                                    <input type="text" required placeholder="Ingrese el modelo">
+                                    <input type="text" name="modelo" required placeholder="Ingrese el modelo">
                                 </div>
                             </div>
-                            
+
                             <!-- Nuevos Campos Grupo y Subgrupo -->
                             <div class="form-group">
                                 <label>
@@ -361,10 +241,10 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-layer-group input-icon"></i>
-                                    <input type="text" required placeholder="Ingrese el grupo">
+                                    <input type="text" name="grupo" required placeholder="Ingrese el grupo">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>
                                     <i class="fas fa-users"></i>
@@ -372,10 +252,10 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-layer-group input-icon"></i>
-                                    <input type="text" required placeholder="Ingrese el subgrupo">
+                                    <input type="text" name="subgrupo" required placeholder="Ingrese el subgrupo">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>
                                     <i class="fas fa-barcode"></i>
@@ -383,10 +263,11 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-hashtag input-icon"></i>
-                                    <input type="text" required placeholder="Ingrese el número de serie">
+                                    <input type="text" name="numero_serie" required
+                                        placeholder="Ingrese el número de serie">
                                 </div>
                             </div>
-                            
+
                             <!-- Campos de 2 columnas -->
                             <div class="form-group" style="grid-column: span 2;">
                                 <label>
@@ -394,20 +275,22 @@
                                     Incorporaciones
                                 </label>
                                 <div style="position: relative;">
-                                    <textarea required placeholder="Detalle de las incorporaciones"></textarea>
+                                    <textarea required name="incorporaciones"
+                                        placeholder="Detalle de las incorporaciones"></textarea>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group" style="grid-column: span 2;">
                                 <label>
                                     <i class="fas fa-comment-dots"></i>
                                     Observaciones
                                 </label>
                                 <div style="position: relative;">
-                                    <textarea required placeholder="Agregue observaciones relevantes"></textarea>
+                                    <textarea required name="observaciones"
+                                        placeholder="Agregue observaciones relevantes"></textarea>
                                 </div>
                             </div>
-            
+
                             <!-- Sección 2 - Clasificación -->
                             <div class="form-group">
                                 <label>
@@ -416,13 +299,10 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-sitemap input-icon"></i>
-                                    <select required>
-                                        <option value="4">Sección 4</option>
-                                        <option value="5">Sección 5</option>
-                                    </select>
+                                    <input type="number" min="0" name="seccion" required placeholder="Ej: 2">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>
                                     <i class="fas fa-exchange-alt"></i>
@@ -430,10 +310,11 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-arrows-alt-h input-icon"></i>
-                                    <input type="text" required placeholder="Ingrese el concepto">
+                                    <input type="text" required name="concepto_movimiento"
+                                        placeholder="Ingrese el concepto">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>
                                     <i class="fas fa-hashtag"></i>
@@ -441,10 +322,10 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-calculator input-icon"></i>
-                                    <input type="number" min="0" required placeholder="Ej: 5">
+                                    <input type="number" min="0" name="cantidad" required placeholder="Ej: 5">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>
                                     <i class="fas fa-id-card"></i>
@@ -452,10 +333,11 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-fingerprint input-icon"></i>
-                                    <input type="text" required placeholder="ID único del bien">
+                                    <input type="text" required name="numero_identificacion"
+                                        placeholder="ID único del bien">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group" style="grid-column: span 2;">
                                 <label>
                                     <i class="fas fa-building"></i>
@@ -463,7 +345,7 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-university input-icon"></i>
-                                    <select required>
+                                    <select required name="departamento">
                                         <option value="">Seleccione un departamento</option>
                                         <option>Departamento 1</option>
                                         <option>Departamento 2</option>
@@ -471,7 +353,7 @@
                                     </select>
                                 </div>
                             </div>
-            
+
                             <!-- Footer que ocupa ancho completo -->
                             <div class="modal-footer" style="grid-column: span 2;">
                                 <div class="button-group">
@@ -491,24 +373,7 @@
             </div>
         </main>
     </div>
-    <script>
-        const modal = document.getElementById('modal');
-        
-        function openModal() {
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        modal.addEventListener('click', (e) => {
-            if(e.target === modal) closeModal();
-        });
-        
-
-    </script>
+    <script src="/javascripts/scriptBienes.js"></script>
 </body>
+
 </html>

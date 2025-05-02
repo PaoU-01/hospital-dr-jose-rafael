@@ -7,7 +7,6 @@ const loginAuth = (req, res) => {
     if (!email || !password) {
         return res.status(400).json({ error: 'Faltan credenciales' });
     }
-
     db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
         if (err) {
             return res.status(500).json({ error: 'Error en el servidor' });

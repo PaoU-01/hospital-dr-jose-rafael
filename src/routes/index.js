@@ -3,17 +3,39 @@ const express = require('express');
 const router = express.Router();
 const loginAuth = require('../controllers/loginController.js');
 const authenticateToken = require('../middleware/auth.js');
+const ControllerBienes  = require('../controllers/controllerBienes.js');
+
+const controllerBienes = new ControllerBienes();
+
+
 
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index');
 });
 
-router.get('/panel', authenticateToken, (req, res) => {
-  res.render('panel', { nombre: req.user.nombre });
+router.get('/panel', authenticateToken, async (req, res) => {
+  controllerBienes.mostrarBienes(req, res);
 }
 );
-router.get('/departamentos', (req, res) => {
-  res.render('departamentos');
+
+router.post('/bienes/agregar', authenticateToken, async (req, res) => {
+  controllerBienes.agregarBienes(req, res);
+}
+);
+
+
+router.post('/bienes/editar/:id', authenticateToken, async (req, res) => {
+  controllerBienes.editarBienes(req, res);
+}
+);
+
+router.post('/bienes/eliminar/:id', authenticateToken, async (req, res) => {
+  controllerBienes.eliminarBienes(req, res);
+}
+);
+
+router.get('/departamentos', authenticateToken,  (req, res) => {
+  res.render('departamentos', { nombre: req.user.nombre });
 }
 );
 

@@ -12,6 +12,7 @@ const db = new sqlite3.Database('./src/db/database.sql', (err) => {
 });
 
 function initializeDatabase() {
+    /*
     db.run(`
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -22,23 +23,26 @@ function initializeDatabase() {
             password TEXT NOT NULL)
     `);
 
-    db.get("SELECT COUNT(*) as count FROM users", (err, row) => {
-        if (err) return console.error(err.message);
-        if (row.count === 0) {
-            const testPassword = bcrypt.hashSync('123456789', 10); 
-            db.run(
-                `INSERT INTO users (cedula, email, rol, nombre, password) 
-                    VALUES (?, ?, ?, ?, ?)`,
-                ['30406581', 'test@test.com', 1, 'Paola Uriarte', testPassword],
-                (err) => {
-                    if (err) return console.error('Error insertando usuario:', err.message);
-                    console.log('Usuario de prueba creado:');
-                    console.log('Email: test@example.com');
-                    console.log('Contraseña: 123456789');
-                }
-            );
-        }
-    });
+
+    db.run(`
+    CREATE TABLE bienes IF NOT EXISTS (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    marca TEXT NOT NULL,
+    modelo TEXT NOT NULL,
+    grupo TEXT NOT NULL,
+    subgrupo TEXT NOT NULL,
+    numero_serie TEXT NOT NULL,
+    incorporaciones TEXT NOT NULL,
+    observaciones TEXT NOT NULL,
+    seccion INTEGER NOT NULL,
+    concepto_movimiento TEXT NOT NULL,
+    cantidad INTEGER NOT NULL,
+    numero_identificacion TEXT UNIQUE NOT NULL,
+    departamento TEXT NOT NULL);
+`);
+*/
+
 
 }
 
