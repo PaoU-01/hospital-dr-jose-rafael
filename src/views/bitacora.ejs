@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generar Bitácora</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="/stylesheets/all.min.css">
+    <link rel="stylesheet" href="/stylesheets/bienes.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="flex">
+        <aside class="w-64 bg-gray-900 min-h-screen p-4 fixed">
+            <div class="mb-6">
+                <img src="/images/logo-removebg-preview.png" alt="" class="w-28 h-28 mx-auto mb-4 yo">
+            </div>
+
+            <nav>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="/panel"
+                            class="flex items-center hover:text-white p-3 text-gray-300 hover:bg-blue-800 rounded-lg group active-menu">
+                            <i class="fas fa-box text-gray-400 group-hover:text-white mr-3"></i>
+                            Bienes
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/departamentos"
+                            class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
+                            <i class="fas fa-building text-gray-400 group-hover:text-white mr-3"></i>
+                            Departamentos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/estadisticas"
+                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                            <i class="fas fa-chart-bar text-gray-400 group-hover:text-white mr-3"></i>
+                            Estadísticas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/bitacora"
+                            class="flex items-center bg-blue-800 p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                            <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
+                            Bitácora
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="ml-64 p-8 w-full">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-file-excel mr-2 text-green-600"></i>
+                Generar Reporte BM-1
+            </h1>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <form action="/bitacora/generar-excel" method="POST">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
+                        <select name="departamento_id" class="w-full p-2 border rounded" required>
+                            <% departamentos.forEach(dpto => { %>
+                                <option value="<%= dpto.id %>"><%= dpto.nombre %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        <i class="fas fa-file-excel mr-2"></i>
+                        Generar Reporte Excel
+                    </button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

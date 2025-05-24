@@ -1,4 +1,7 @@
 const modelBienes = require('../models/modelBienes.js');
+const Excel = require('exceljs');
+const fs = require('fs');
+const path = require('path')
 
 class ControllerBienes {
     constructor() {
@@ -124,6 +127,54 @@ class ControllerBienes {
             res.status(500).send('Error al cargar las estadísticas');
         }
     }
+
+
+    async mostrarFormulario(req, res) {
+        try {
+            const departamentos = await this.modelBienes.getAllDepartamentos();
+            res.render('bitacora', { departamentos });
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).send('Error al cargar el formulario');
+        }
+    }
+
+    async exportarBitacora(req, res) {
+    try {
+      const { departamento_id } = req.body;
+      const departamento = await this.modelBienes.getDepartamentoById(departamento_id);
+      const bienes = await this.modelBienes.getBienesPorDepartamento(departamento_id);
+      const workbook = new Excel.Workbook();
+      await workbook.xlsx.readFile(path.resolve(__dirname, 'BM1_2022-hospital.xlsx'));
+      const ws = workbook.getWorksheet('Hoja1');
+      ws.getCell('H8').value = departamento.nombre;
+      let fila = 15;
+      for (const b of bienes) {
+        ws.getCell(`A${fila}`).value = b.grupo;
+        ws.getCell(`B${fila}`).value = b.subgrupo;
+        ws.getCell(`C${fila}`).value = b.seccion;
+        ws.getCell(`D${fila}`).value = b.cantidad;
+        ws.getCell(`E${fila}`).value = b.numero_identificacion;
+        ws.getCell(`F${fila}`).value = b.estado;
+        ws.getCell(`G${fila}`).value = b.nombre;
+        ws.getCell(`H${fila}`).value = b.costo;
+        ws.getCell(`I${fila}`).value = b.cantidad * b.costo;
+        fila++;
+      }
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename=Bitacora_${departamento.nombre}.xlsx`);
+
+      await workbook.xlsx.write(res);
+      res.end();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Error al generar la bitácora');
+    }
+  }
+
+
+ 
+
 
 
 }

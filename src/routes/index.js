@@ -37,16 +37,24 @@ router.get('/departamentos', authenticateToken, (req, res) => {
 }
 );
 
-router.post('/departamentos/agregar', authenticateToken, async (req,res) => {
-  controllerBienes.agregarDepartamento(req,res)
+router.post('/departamentos/agregar', authenticateToken, async (req, res) => {
+  controllerBienes.agregarDepartamento(req, res)
 });
-router.post('/departamentos/editar/:id', authenticateToken, async (req,res) => { controllerBienes.editarDepartamento(req,res) });
-router.post('/departamentos/eliminar/:id', authenticateToken, async (req,res) => { controllerBienes.eliminarDepartamento(req,res) });
+router.post('/departamentos/editar/:id', authenticateToken, async (req, res) => { controllerBienes.editarDepartamento(req, res) });
+router.post('/departamentos/eliminar/:id', authenticateToken, async (req, res) => { controllerBienes.eliminarDepartamento(req, res) });
 
-router.get('/estadisticas', authenticateToken, async(req,res) => {
-  controllerBienes.mostrarEstadisticas(req,res);
+router.get('/estadisticas', authenticateToken, async (req, res) => {
+  controllerBienes.mostrarEstadisticas(req, res);
 })
 
+router.get('/bitacora', authenticateToken, async (req, res) => {
+  controllerBienes.mostrarFormulario(req, res)
+})
+
+
+router.post('/bitacora/generar-excel', authenticateToken, async(req,res)=>{
+  controllerBienes.exportarBitacora(req,res);
+} );
 
 
 

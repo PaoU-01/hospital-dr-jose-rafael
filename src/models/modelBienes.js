@@ -197,6 +197,34 @@ class ModelBienes {
     }
 
 
+    getDepartamentoById(id) {
+    return new Promise((resolve, reject) => {
+      this.db.get(
+        'SELECT * FROM departamentos WHERE id = ?',
+        [id],
+        (err, row) => (err ? reject(err) : resolve(row))
+      );
+    });
+  }
+
+  getBienesPorDepartamento(deptoId) {
+    return new Promise((resolve, reject) => {
+      this.db.all(
+        `SELECT 
+           nombre, marca, modelo, grupo, subgrupo, numero_serie,
+           incorporaciones, observaciones, seccion, estado,
+           concepto_movimiento, cantidad, numero_identificacion, costo
+         FROM bienes
+         WHERE departamento_id = ?`,
+        [deptoId],
+        (err, rows) => (err ? reject(err) : resolve(rows))
+      );
+    });
+  }
+
+
+
+
 
 
 
