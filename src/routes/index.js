@@ -43,6 +43,9 @@ router.post('/departamentos/agregar', authenticateToken, async (req,res) => {
 router.post('/departamentos/editar/:id', authenticateToken, async (req,res) => { controllerBienes.editarDepartamento(req,res) });
 router.post('/departamentos/eliminar/:id', authenticateToken, async (req,res) => { controllerBienes.eliminarDepartamento(req,res) });
 
+router.get('/estadisticas', authenticateToken, async(req,res) => {
+  controllerBienes.mostrarEstadisticas(req,res);
+})
 
 
 

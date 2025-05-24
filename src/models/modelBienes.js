@@ -140,6 +140,64 @@ class ModelBienes {
             });
         })
     }
+
+
+    getTotalBienes() {
+        return new Promise((resolve, reject) => {
+            this.db.get(
+                'SELECT COUNT(*) AS total FROM bienes',
+                (err, row) => {
+                    if (err) reject(err);
+                    else resolve(row.total);
+                }
+            );
+        });
+    }
+
+    getPresupuestoTotal() {
+        return new Promise((resolve, reject) => {
+            this.db.get(
+                'SELECT SUM(costo) AS total FROM bienes',
+                (err, row) => {
+                    if (err) reject(err);
+                    else resolve(row.total || 0);
+                }
+            );
+        });
+    }
+
+    /*
+    getDistribucionSeccion() {
+        return new Promise((resolve, reject) => {
+            this.db.all(
+                `SELECT seccion, 
+                COUNT(*) * 100.0 / (SELECT COUNT(*) FROM bienes) AS porcentaje 
+                FROM bienes 
+                GROUP BY seccion`,
+                (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                }
+            );
+        });
+    }*/
+
+    getClasificacionTipo() {
+        return new Promise((resolve, reject) => {
+            this.db.all(
+                'SELECT grupo, COUNT(*) AS cantidad FROM bienes GROUP BY grupo',
+                (err, rows) => {
+                    if (err) reject(err);
+                    else resolve(rows);
+                }
+            );
+        });
+    }
+
+
+
+
+
 }
 
 module.exports = ModelBienes;

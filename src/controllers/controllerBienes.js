@@ -105,6 +105,27 @@ class ControllerBienes {
     }
 
 
+    async mostrarEstadisticas(req, res) {
+        try {
+            const [totalBienes, presupuestoTotal, clasificacionTipo] = await Promise.all([
+                this.modelBienes.getTotalBienes(),
+                this.modelBienes.getPresupuestoTotal(),
+                this.modelBienes.getClasificacionTipo()
+            ]);
+
+            res.render('estadisticas', {
+                totalBienes,
+                presupuestoTotal,
+                clasificacionTipo,
+                nombre: req.user.nombre
+            });
+        } catch (error) {
+            console.error('Error al obtener estadísticas:', error);
+            res.status(500).send('Error al cargar las estadísticas');
+        }
+    }
+
+
 }
 
 module.exports = ControllerBienes;
