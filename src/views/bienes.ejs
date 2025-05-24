@@ -73,6 +73,11 @@
                     Agregar un bien
                 </button>
             </div>
+                                <div class="search-container mb-6">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchBienesInput" class="search-input" placeholder="Buscar bienes..."
+                            oninput="searchBienes()">
+                    </div>
 
             <!-- Content Card -->
             <div class="bg-white rounded-xl shadow-md p-6">
@@ -91,7 +96,7 @@
                                 <th class="pb-3">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="bienesTableBody">
                             <% if (bienes.length> 0) { %>
                                 <% for (let i=0; i < bienes.length; i++) { %>
                                     <tr class="border-b hover:bg-gray-50">
@@ -346,7 +351,7 @@
                                 <div style="position: relative;">
                                     <i class="fas fa-fingerprint input-icon"></i>
                                     <input type="text" required name="numero_identificacion"
-                                        placeholder="ID único del bien" >
+                                        placeholder="ID único del bien">
                                 </div>
                             </div>
 
@@ -397,6 +402,58 @@
         </main>
     </div>
     <script src="/javascripts/scriptBienes.js"></script>
+    <script>
+        function searchBienes() {
+            const input = document.getElementById('searchBienesInput');
+            const filter = input.value.toUpperCase();
+            const tableBody = document.getElementById('bienesTableBody');
+            const rows = tableBody.getElementsByTagName('tr');
+            let hasResults = false;
+
+            // Eliminar mensajes anteriores de no resultados
+            const existingNoResults = tableBody.querySelectorAll('.no-results');
+            existingNoResults.forEach(noResult => noResult.parentNode.remove());
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let showRow = false;
+
+                // Columnas a buscar: Nombre (1), Marca (2), Modelo (3), Concepto Movimiento (6)
+                if (cells.length > 6) {
+                    const nombre = cells[1].textContent.toUpperCase();
+                    const marca = cells[2].textContent.toUpperCase();
+                    const modelo = cells[3].textContent.toUpperCase();
+                    const concepto = cells[6].textContent.toUpperCase();
+
+                    showRow = nombre.includes(filter) ||
+                        marca.includes(filter) ||
+                        modelo.includes(filter) ||
+                        concepto.includes(filter);
+                }
+
+                if (showRow) {
+                    rows[i].style.display = '';
+                    hasResults = true;
+                } else {
+                    rows[i].style.display = 'none';
+                }
+            }
+
+            if (!hasResults) {
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.innerHTML = `
+            <td colspan="8" class="no-results">
+                No se encontraron bienes que coincidan con la búsqueda
+            </td>`;
+                tableBody.appendChild(noResultsRow);
+            }
+        }
+
+        // Opcional: Búsqueda al presionar Enter
+        document.getElementById('searchBienesInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') searchBienes();
+        });
+    </script>
 </body>
 
 </html>
