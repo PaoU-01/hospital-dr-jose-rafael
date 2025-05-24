@@ -86,8 +86,9 @@ class ModelBienes {
             concepto_movimiento, 
             cantidad, 
             numero_identificacion, 
-            departamento) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            departamento_id,
+            costo) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             const params =
                 [bienes.nombre,
                 bienes.marca,
@@ -101,7 +102,8 @@ class ModelBienes {
                 bienes.concepto_movimiento,
                 bienes.cantidad,
                 bienes.numero_identificacion,
-                bienes.departamento];
+                bienes.departamento,
+                bienes.costo];
             this.db.run(sql, params, function (err) {
                 if (err) {
                     reject(err);
@@ -114,8 +116,8 @@ class ModelBienes {
 
     editarBienes(bienes, id) {
         return new Promise((resolve, reject) => {
-            const sql = `UPDATE bienes SET nombre = ?, marca = ?, modelo = ?, grupo = ?, subgrupo = ?, numero_serie = ?, incorporaciones = ?, observaciones = ?, seccion = ?, concepto_movimiento = ?, cantidad = ?, numero_identificacion = ?, departamento = ? WHERE id = ?`;
-            const params = [bienes.nombre, bienes.marca, bienes.modelo, bienes.grupo, bienes.subgrupo, bienes.numero_serie, bienes.incorporaciones, bienes.observaciones, bienes.seccion, bienes.concepto_movimiento, bienes.cantidad, bienes.numero_identificacion, bienes.departamento, id];
+            const sql = `UPDATE bienes SET nombre = ?, marca = ?, modelo = ?, grupo = ?, subgrupo = ?, numero_serie = ?, incorporaciones = ?, observaciones = ?, seccion = ?, concepto_movimiento = ?, cantidad = ?, numero_identificacion = ?, departamento_id = ?, costo = ? WHERE id = ?`;
+            const params = [bienes.nombre, bienes.marca, bienes.modelo, bienes.grupo, bienes.subgrupo, bienes.numero_serie, bienes.incorporaciones, bienes.observaciones, bienes.seccion, bienes.concepto_movimiento, bienes.cantidad, bienes.numero_identificacion, bienes.departamento_id, bienes.costo, id];
             this.db.run(sql, params, function (err) {
                 if (err) {
                     reject(err);

@@ -131,7 +131,8 @@
                                           '<%= bienes[i].concepto_movimiento %>',
                                           '<%= bienes[i].cantidad %>',
                                           '<%= bienes[i].numero_identificacion %>',
-                                          '<%= bienes[i].departamento %>'
+                                          '<%= bienes[i].departamento_id %>',
+                                          '<%= bienes[i].costo %>'
                                         )" class="text-blue-500 hover:text-blue-700 mr-2">
                                                 <i class="fas fa-edit"></i>
                                             </button>
@@ -328,13 +329,24 @@
 
                             <div class="form-group">
                                 <label>
+                                    <i class="fas fa-circle-dollar-to-slot"></i>
+                                    Costo
+                                </label>
+                                <div style="position: relative;">
+                                    <i class="fas fa-dollar-sign input-icon"></i>
+                                    <input type="number" min="0" name="costo" required placeholder="Ej: 3">
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="grid-column: span 2;">
+                                <label>
                                     <i class="fas fa-id-card"></i>
                                     Número de Identificación
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-fingerprint input-icon"></i>
                                     <input type="text" required name="numero_identificacion"
-                                        placeholder="ID único del bien">
+                                        placeholder="ID único del bien" >
                                 </div>
                             </div>
 
@@ -345,7 +357,7 @@
                                 </label>
                                 <div style="position: relative;">
                                     <i class="fas fa-university input-icon"></i>
-                                    <select required name="departamento" id="departamento" <% if (!departamentos ||
+                                    <select required name="departamento_id" id="departamento" <% if (!departamentos ||
                                         departamentos.length===0) { %>
                                         disabled
                                         <% } %>
