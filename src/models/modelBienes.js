@@ -82,13 +82,14 @@ class ModelBienes {
             numero_serie, 
             incorporaciones, 
             observaciones, 
-            seccion, 
+            seccion,
+            estado,
             concepto_movimiento, 
             cantidad, 
             numero_identificacion, 
             departamento_id,
             costo) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             const params =
                 [bienes.nombre,
                 bienes.marca,
@@ -99,10 +100,11 @@ class ModelBienes {
                 bienes.incorporaciones,
                 bienes.observaciones,
                 bienes.seccion,
+                bienes.estado,
                 bienes.concepto_movimiento,
                 bienes.cantidad,
                 bienes.numero_identificacion,
-                bienes.departamento,
+                bienes.departamento_id,
                 bienes.costo];
             this.db.run(sql, params, function (err) {
                 if (err) {

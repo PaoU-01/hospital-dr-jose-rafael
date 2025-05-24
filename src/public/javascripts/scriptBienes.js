@@ -57,7 +57,7 @@ let currentEditId = null;
 function openEditModal(
     id, nombre, marca, modelo, grupo, subgrupo,
     numero_serie, incorporaciones, observaciones,
-    seccion, concepto_movimiento, cantidad,
+    seccion, estado, concepto_movimiento, cantidad,
     numero_identificacion, departamento_id, costo
 ) {
     currentEditId = id;
@@ -70,6 +70,7 @@ function openEditModal(
     document.querySelector('textarea[name="incorporaciones"]').value = incorporaciones;
     document.querySelector('textarea[name="observaciones"]').value = observaciones;
     document.querySelector('input[name="seccion"]').value = seccion;
+    document.querySelector('select[name="estado"]').value = estado;
     document.querySelector('input[name="concepto_movimiento"]').value = concepto_movimiento;
     document.querySelector('input[name="cantidad"]').value = cantidad;
     document.querySelector('input[name="numero_identificacion"]').value = numero_identificacion;

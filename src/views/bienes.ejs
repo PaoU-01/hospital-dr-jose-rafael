@@ -73,11 +73,11 @@
                     Agregar un bien
                 </button>
             </div>
-                                <div class="search-container mb-6">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchBienesInput" class="search-input" placeholder="Buscar bienes..."
-                            oninput="searchBienes()">
-                    </div>
+            <div class="search-container mb-6">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchBienesInput" class="search-input" placeholder="Buscar bienes..."
+                    oninput="searchBienes()">
+            </div>
 
             <!-- Content Card -->
             <div class="bg-white rounded-xl shadow-md p-6">
@@ -133,6 +133,7 @@
                                           '<%= bienes[i].incorporaciones %>',
                                           '<%= bienes[i].observaciones %>',
                                           '<%= bienes[i].seccion %>',
+                                          '<%= bienes[i].estado %>',
                                           '<%= bienes[i].concepto_movimiento %>',
                                           '<%= bienes[i].cantidad %>',
                                           '<%= bienes[i].numero_identificacion %>',
@@ -311,6 +312,23 @@
 
                             <div class="form-group">
                                 <label>
+                                    <i class="fas fa-stream"></i>
+                                    Estado
+                                </label>
+                                <div style="position: relative;">
+                                    <i class="fas fa-question input-icon"></i>
+                                    <select required name="estado" id="estado">
+                                        <option value="">Seleccione un estado</option>
+                                        <option value="OPERATIVO">Operativo</option>
+                                        <option value="DAÑADO">Dañado</option>
+
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>
                                     <i class="fas fa-exchange-alt"></i>
                                     Concepto de Movimiento
                                 </label>
@@ -343,7 +361,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" style="grid-column: span 2;">
+                            <div class="form-group">
                                 <label>
                                     <i class="fas fa-id-card"></i>
                                     Número de Identificación

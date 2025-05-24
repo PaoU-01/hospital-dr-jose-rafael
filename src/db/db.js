@@ -40,6 +40,7 @@ function initializeDatabase() {
     incorporaciones TEXT NOT NULL,
     observaciones TEXT NOT NULL,
     seccion INTEGER NOT NULL,
+    estado TEXT NOT NULL,
     concepto_movimiento TEXT NOT NULL,
     cantidad INTEGER NOT NULL,
     numero_identificacion TEXT UNIQUE NOT NULL,
