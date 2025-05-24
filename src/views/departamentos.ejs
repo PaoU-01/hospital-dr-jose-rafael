@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Departamentos</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <!-- Font Awesome Local -->
     <link rel="stylesheet" href="/stylesheets/all.min.css">
-
+    <link rel="stylesheet" href="/stylesheets/bienes.css">
     <style>
-        /* Estilos del modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -22,7 +21,7 @@
             align-items: center;
             z-index: 1000;
         }
-        
+
         .modal-content {
             background: white;
             border-radius: 10px;
@@ -31,9 +30,9 @@
             max-height: 90vh;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
-        
+
         .modal-header {
             padding: 20px;
             border-bottom: 1px solid #e5e7eb;
@@ -44,32 +43,32 @@
             color: white;
             border-radius: 10px 10px 0 0;
         }
-        
+
         .modal-body {
             flex: 1;
             overflow-y: auto;
             padding: 25px;
         }
-        
+
         .modal-footer {
             padding: 20px;
             background: #f8fafc;
             border-radius: 1rem;
             width: 100%;
         }
-        
+
         /* Estilos del formulario */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
         }
-        
+
         .form-group {
             position: relative;
             margin-bottom: 15px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -79,7 +78,7 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         .form-group input,
         .form-group select,
         .form-group textarea {
@@ -103,7 +102,7 @@
             color: #64748b;
             font-size: 16px;
         }
-        
+
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -111,13 +110,13 @@
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-        
+
         .button-group {
             display: flex;
             gap: 12px;
             justify-content: flex-end;
         }
-        
+
         .btn {
             padding: 12px 24px;
             border-radius: 6px;
@@ -128,24 +127,24 @@
             gap: 8px;
             font-weight: 500;
         }
-        
+
         .btn-primary {
             background: #3b82f6;
             color: white;
             border: none;
         }
-        
+
         .btn-primary:hover {
             background: #2563eb;
             transform: translateY(-1px);
         }
-        
+
         .btn-secondary {
             background: #f1f5f9;
             color: #64748b;
             border: 1px solid #e2e8f0;
         }
-        
+
         .btn-secondary:hover {
             background: #e2e8f0;
             transform: translateY(-1px);
@@ -155,41 +154,45 @@
             width: 20px;
             text-align: center;
         }
-
     </style>
 
 
 </head>
+
 <body class="bg-gray-50 min-h-screen">
     <div class="flex">
         <!-- Sidebar -->
         <aside class="w-64 bg-gray-900 min-h-screen p-4 fixed">
             <div class="mb-6">
                 <img src="/images/logo-removebg-preview.png" alt="" class="w-28 h-28 mx-auto mb-4 yo">
-              </div>
-            
+            </div>
+
             <nav>
                 <ul class="space-y-2">
                     <li>
-                        <a href="/panel" class="flex items-center hover:text-white p-3 text-gray-300 hover:bg-blue-800 rounded-lg group active-menu">
+                        <a href="/panel"
+                            class="flex items-center hover:text-white p-3 text-gray-300 hover:bg-blue-800 rounded-lg group active-menu">
                             <i class="fas fa-box text-gray-400 group-hover:text-white mr-3"></i>
                             Bienes
                         </a>
                     </li>
                     <li>
-                        <a href="/departamentos" class="flex items-center bg-blue-800 p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
+                        <a href="/departamentos"
+                            class="flex items-center bg-blue-800 p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-building text-gray-400 group-hover:text-white mr-3"></i>
                             Departamentos
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                        <a href="#"
+                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-chart-bar text-gray-400 group-hover:text-white mr-3"></i>
                             Estadísticas
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                        <a href="#"
+                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
                             Bitácora
                         </a>
@@ -204,15 +207,18 @@
             <div class="flex justify-between items-center mb-8">
                 <div>
                     <p class="text-sm text-gray-500 mb-5">
-                        Bienvenido/a, 
-                        <span class="font-semibold text-blue-600"><%= nombre %></span>
-                    </p>    
+                        Bienvenido/a,
+                        <span class="font-semibold text-blue-600">
+                            <%= nombre %>
+                        </span>
+                    </p>
                     <h1 class="text-2xl font-bold text-gray-800">
                         <i class="fas fa-building-columns mr-2 text-blue-500"></i>
                         Gestión de Departamentos
                     </h1>
                 </div>
-                <button onclick="openModal()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center mb-4">
+                <button onclick="openClasificacionModal()"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center mb-4">
                     <i class="fas fa-plus-circle mr-2"></i>
                     Agregar un departamento
                 </button>
@@ -228,153 +234,112 @@
                                 <th class="pb-3">Clasificación</th>
                                 <th class="pb-3">Departamento</th>
                                 <th class="pb-3">Dependencia</th>
-                                <th class="pb-3">Cantidad</th>
-                                <th class="pb-3">Costo Total</th>
                                 <th class="pb-3">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Ejemplo de fila -->
-                            <tr class="border-b hover:bg-gray-50">
-                                <td>1</td>  
-                                <td class="py-3">Informática</td>
-                                <td>Cocina</td>
-                                <td>9</td>
-                                <td>140 bs</td>
-                                <td>
-                                    <button class="text-blue-500 hover:text-blue-700 mr-3">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-red-500 hover:text-red-700">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- Otra fila -->
-                            <tr class="border-b hover:bg-gray-50">
-                                <td>2</td>
-                                <td class="py-3">Recursos Humanos</td>
-                                <td>Oficina</td>
-                                <td>7</td>
-                                <td>189 bs</td>
-                                <td>
-                                    <button class="text-blue-500 hover:text-blue-700 mr-3">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="text-red-500 hover:text-red-700">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <% if (departamentos.length> 0) { %>
+                                <% for (let i=0; i < departamentos.length; i++) { %>
+                                    <tr class="border-b hover:bg-gray-50" data-id="<%= departamentos[i].id %>">
+                                        <td class="clasificacion p-4">
+                                            <%= departamentos[i].clasificacion %>
+                                        </td>
+                                        <td class="nombre">
+                                            <%= departamentos[i].nombre %>
+                                        </td>
+                                        <td class="dependencia">
+                                            <%= departamentos[i].dependencia %>
+                                        </td>
+                                        <td>
+                                            <button class="text-blue-500 hover:text-blue-700 mr-3 edit-btn">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-red-500 hover:text-red-700 delete-btn">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                        <% } else { %>
+                                            <tr class="border-b hover:bg-gray-50">
+                                                <td colspan="7" class="py-3 text-center text-gray-500">No hay
+                                                    departamentos
+                                                    registrados</td>
+                                            </tr>
+                                            <% } %>
                         </tbody>
                     </table>
                 </div>
-
-                <!-- Estadísticas Rápidas 
-                <div class="grid grid-cols-4 gap-4 mt-8">
-                    <div class="bg-blue-50 p-4 rounded-lg flex items-center">
-                        <i class="fas fa-cube text-blue-600 text-2xl mr-3"></i>
-                        <div>
-                            <h3 class="text-sm text-blue-600 mb-1">Total Bienes</h3>
-                            <p class="text-xl font-bold">245</p>
-                        </div>
-                    </div>
-                    <div class="bg-green-50 p-4 rounded-lg flex items-center">
-                        <i class="fas fa-check-circle text-green-600 text-2xl mr-3"></i>
-                        <div>
-                            <h3 class="text-sm text-green-600 mb-1">Activos</h3>
-                            <p class="text-xl font-bold">198</p>
-                        </div>
-                    </div>
-                    <div class="bg-yellow-50 p-4 rounded-lg flex items-center">
-                        <i class="fas fa-tools text-yellow-600 text-2xl mr-3"></i>
-                        <div>
-                            <h3 class="text-sm text-yellow-600 mb-1">Mantenimiento</h3>
-                            <p class="text-xl font-bold">32</p>
-                        </div>
-                    </div>
-                    <div class="bg-red-50 p-4 rounded-lg flex items-center">
-                        <i class="fas fa-times-circle text-red-600 text-2xl mr-3"></i>
-                        <div>
-                            <h3 class="text-sm text-red-600 mb-1">Dados de Baja</h3>
-                            <p class="text-xl font-bold">15</p>
-                        </div>
-                    </div>
-                </div>-->
             </div>
             <div class="modal-overlay" id="modalClasificacion">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="modal-title">
-                            <i class="fas fa-project-diagram mr-2"></i>
-                            Relación Institucional
-                        </h2>
-                        <button onclick="closeClasificacionModal()" class="modal-close-btn">
-                            <i class="fas fa-times"></i>
-                        </button>
+                <div class="modal-content max-w-2xl w-full">
+                    <div class="modal-header border-b pb-4 mb-6">
+                        <div class="flex items-center justify-between w-full"
+                            style="margin: 0; display: flex; align-items: center; gap: 10px;">
+                            <h2 style="margin: 0; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-project-diagram text-white"></i>
+                                Relación Institucional
+                            </h2>
+                            <button onclick="closeClasificacionModal()"
+                                class="text-gray-500 hover:text-gray-700 transition-colors">
+                                <i class="fas fa-times"
+                                    style="background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;"></i>
+                            </button>
+                        </div>
                     </div>
-            
+
                     <div class="modal-body">
-                        <form class="space-y-6">
-                            <!-- Clasificación -->
+                        <form class="space-y-6 px-2" id="formDepartamento">
                             <div class="form-group">
-                                <label class="input-label">
-                                    <i class="fas fa-layer-group mr-2 text-blue-500"></i>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">
+                                    <i class="fas fa-layer-group text-blue-500"></i>
                                     Clasificación
                                 </label>
-                                <div class="input-container">
-                                    <select class="form-select">
-                                        <option value="">Seleccionar clasificación</option>
-                                        <option>Clasificación A</option>
-                                        <option>Clasificación B</option>
-                                        <option>Clasificación C</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down input-icon-right"></i>
+                                <div class="relative">
+                                    <input type="number" min="0" id="clasificacion" name="clasificacion"
+                                        class="w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                                        placeholder="Ej: 2" required>
+                                    <i class="fas fa-layer-group absolute left-4 top-4 text-gray-400"></i>
                                 </div>
                             </div>
-            
+
                             <!-- Departamento -->
                             <div class="form-group">
-                                <label class="input-label">
-                                    <i class="fas fa-building mr-2 text-blue-500"></i>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">
+                                    <i class="fas fa-building text-blue-500"></i>
                                     Departamento
                                 </label>
-                                <div class="input-container">
-                                    <input type="text" 
-                                           class="form-input"
-                                           placeholder="Ej: Recursos Humanos"
-                                           required>
-                                    <i class="fas fa-door-open input-icon-right"></i>
+                                <div class="relative">
+                                    <input type="text" id="nombre" name="nombre"
+                                        class="w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                                        placeholder="Ej: Recursos Humanos" required>
+                                    <i class="fas fa-door-open absolute left-4 top-4 text-gray-400"></i>
                                 </div>
                             </div>
-            
+
                             <!-- Dependencia -->
                             <div class="form-group">
-                                <label class="input-label">
-                                    <i class="fas fa-sitemap mr-2 text-blue-500"></i>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">
+                                    <i class="fas fa-sitemap text-blue-500"></i>
                                     Dependencia
                                 </label>
-                                <div class="input-container">
-                                    <select class="form-select">
-                                        <option value="">Seleccionar dependencia</option>
-                                        <option>Dependencia Directa</option>
-                                        <option>Subdependencia</option>
-                                        <option>Dependencia Externa</option>
-                                    </select>
-                                    <i class="fas fa-network-wired input-icon-right"></i>
+                                <div class="relative">
+                                    <input type="text" id='dependencia' name="dependencia"
+                                        class="w-full pl-10 pr-3 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                                        placeholder="Escribe la dependencia.." required>
+                                    <i class="fas fa-network-wired absolute left-4 top-4 text-gray-400"></i>
                                 </div>
                             </div>
-            
+
                             <!-- Acciones -->
-                            <div class="form-actions">
-                                <button type="button" 
-                                        onclick="closeClasificacionModal()" 
-                                        class="btn-secondary">
+                            <div class="form-actions flex justify-end space-x-4 pt-6 border-t mt-8">
+                                <button type="button" onclick="closeClasificacionModal()"
+                                    class="px-5 py-2.5 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                                     <i class="fas fa-times mr-2"></i>
                                     Cancelar
                                 </button>
-                                <button type="submit" 
-                                        class="btn-primary">
+                                <button type="submit"
+                                    class="px-5 py-2.5 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
                                     <i class="fas fa-save mr-2"></i>
                                     Guardar Relación
                                 </button>
@@ -390,17 +355,18 @@
             document.getElementById('modalClasificacion').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
-    
+
         function closeClasificacionModal() {
             document.getElementById('modalClasificacion').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
-    
-        // Cerrar modal al hacer click fuera del contenido
-        document.getElementById('modalClasificacion').addEventListener('click', function(e) {
-            if(e.target === this) closeClasificacionModal();
+
+        document.getElementById('modalClasificacion').addEventListener('click', function (e) {
+            if (e.target === this) closeClasificacionModal();
         });
-    
+
+    </script>
+    <script src="/javascripts/scriptDepartamentos.js">
     </script>
 </body>
 </html>

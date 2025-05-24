@@ -3,11 +3,9 @@ const express = require('express');
 const router = express.Router();
 const loginAuth = require('../controllers/loginController.js');
 const authenticateToken = require('../middleware/auth.js');
-const ControllerBienes  = require('../controllers/controllerBienes.js');
+const ControllerBienes = require('../controllers/controllerBienes.js');
 
 const controllerBienes = new ControllerBienes();
-
-
 
 router.get('/', function (req, res, next) {
   res.render('index');
@@ -34,10 +32,20 @@ router.post('/bienes/eliminar/:id', authenticateToken, async (req, res) => {
 }
 );
 
-router.get('/departamentos', authenticateToken,  (req, res) => {
-  res.render('departamentos', { nombre: req.user.nombre });
+router.get('/departamentos', authenticateToken, (req, res) => {
+  controllerBienes.getAllDepartamentos(req, res);
 }
 );
+
+router.post('/departamentos/agregar', authenticateToken, async (req,res) => {
+  controllerBienes.agregarDepartamento(req,res)
+});
+router.post('/departamentos/editar/:id', authenticateToken, async (req,res) => { controllerBienes.editarDepartamento(req,res) });
+router.post('/departamentos/eliminar/:id', authenticateToken, async (req,res) => { controllerBienes.eliminarDepartamento(req,res) });
+
+
+
+
 
 router.post('/login', (req, res) => {
   loginAuth(req, res);
