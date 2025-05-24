@@ -154,6 +154,45 @@
             width: 20px;
             text-align: center;
         }
+
+        /* Estilos para la barra de búsqueda */
+        .search-container {
+            margin-bottom: 20px;
+            position: relative;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background-color: #f9fafb;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background-color: white;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #6b7280;
+            font-style: italic;
+        }
     </style>
 
 
@@ -224,6 +263,12 @@
                 </button>
             </div>
 
+            <div class="search-container mb-6">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar departamentos..."
+                    oninput="searchDepartments()">
+            </div>
+
             <!-- Content Card -->
             <div class="bg-white rounded-xl shadow-md p-6">
                 <!-- Table -->
@@ -237,7 +282,7 @@
                                 <th class="pb-3">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="departmentsTableBody"> <!-- Agrega este id -->
                             <% if (departamentos.length> 0) { %>
                                 <% for (let i=0; i < departamentos.length; i++) { %>
                                     <tr class="border-b hover:bg-gray-50" data-id="<%= departamentos[i].id %>">
@@ -363,8 +408,52 @@
             if (e.target === this) closeClasificacionModal();
         });
 
+
+
+        function searchDepartments() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const tableBody = document.getElementById('departmentsTableBody'); // Asegúrate que el ID coincida
+            const rows = tableBody.getElementsByTagName('tr');
+            let hasResults = false;
+
+            // Eliminar mensaje anterior SIEMPRE al iniciar la búsqueda
+            const existingNoResults = tableBody.querySelectorAll('.no-results');
+            existingNoResults.forEach(noResult => noResult.parentNode.remove());
+
+            for (let i = 0; i < rows.length; i++) {
+                const nombre = rows[i].querySelector('.nombre')?.textContent.toUpperCase() || '';
+                const clasificacion = rows[i].querySelector('.clasificacion')?.textContent.toUpperCase() || '';
+                const dependencia = rows[i].querySelector('.dependencia')?.textContent.toUpperCase() || '';
+
+                const match = nombre.includes(filter) || clasificacion.includes(filter) || dependencia.includes(filter);
+
+                rows[i].style.display = match ? '' : 'none';
+                if (match) hasResults = true;
+            }
+
+            if (!hasResults) {
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.innerHTML = `
+            <td colspan="4" class="no-results py-3 text-center text-gray-500">
+                No se encontraron departamentos que coincidan con la búsqueda
+            </td>
+        `;
+                tableBody.appendChild(noResultsRow);
+            }
+        }
+
+        // Opcional: Permitir búsqueda al presionar Enter
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchDepartments();
+            }
+        });
+
     </script>
     <script src="/javascripts/scriptDepartamentos.js">
     </script>
+
 </body>
+
 </html>
