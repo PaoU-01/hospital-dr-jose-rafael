@@ -27,7 +27,6 @@ function initializeDatabase() {
 
 */
 
-
     db.run(`
     CREATE TABLE IF NOT EXISTS bienes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

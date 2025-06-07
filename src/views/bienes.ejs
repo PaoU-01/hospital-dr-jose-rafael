@@ -90,9 +90,7 @@
                                 <th class="pb-3">Nombre</th>
                                 <th class="pb-3">Marca</th>
                                 <th class="pb-3">Modelo</th>
-                                <th class="pb-3">Cantidad</th>
                                 <th class="pb-3">Observaciones</th>
-                                <th class="pb-3">Concepto Movimiento</th>
                                 <th class="pb-3">Acciones</th>
                             </tr>
                         </thead>
@@ -113,14 +111,9 @@
                                             <%= bienes[i].modelo %>
                                         </td>
                                         <td class="py-3">
-                                            <%= bienes[i].cantidad %>
-                                        </td>
-                                        <td class="py-3">
                                             <%= bienes[i].observaciones %>
                                         </td>
-                                        <td class="py-3">
-                                            <%= bienes[i].concepto_movimiento %>
-                                        </td>
+
                                         <td class="py-3">
                                             <button onclick="openEditModal(
                                           '<%= bienes[i].id %>',
@@ -134,8 +127,6 @@
                                           '<%= bienes[i].observaciones %>',
                                           '<%= bienes[i].seccion %>',
                                           '<%= bienes[i].estado %>',
-                                          '<%= bienes[i].concepto_movimiento %>',
-                                          '<%= bienes[i].cantidad %>',
                                           '<%= bienes[i].numero_identificacion %>',
                                           '<%= bienes[i].departamento_id %>',
                                           '<%= bienes[i].costo %>'
@@ -282,8 +273,8 @@
                                     Incorporaciones
                                 </label>
                                 <div style="position: relative;">
-                                    <textarea required name="incorporaciones"
-                                        placeholder="Detalle de las incorporaciones"></textarea>
+                                    <input type="number" name="incorporaciones" min="0" id="" placeholder="Ingrese la incorporación"
+                                        required>
                                 </div>
                             </div>
 
@@ -298,7 +289,6 @@
                                 </div>
                             </div>
 
-                            <!-- Sección 2 - Clasificación -->
                             <div class="form-group">
                                 <label>
                                     <i class="fas fa-layer-group"></i>
@@ -321,34 +311,15 @@
                                         <option value="">Seleccione un estado</option>
                                         <option value="OPERATIVO">Operativo</option>
                                         <option value="DAÑADO">Dañado</option>
-
+                                        <option value="EN REPARACION">En reparación</option>
+                                        <option value="DESINCORPORADO">Desincorporado</option>
+                                        <option value="EN PRESTAMO">En prestámo</option>
                                     </select>
                                 </div>
                             </div>
 
 
-                            <div class="form-group">
-                                <label>
-                                    <i class="fas fa-exchange-alt"></i>
-                                    Concepto de Movimiento
-                                </label>
-                                <div style="position: relative;">
-                                    <i class="fas fa-arrows-alt-h input-icon"></i>
-                                    <input type="text" required name="concepto_movimiento"
-                                        placeholder="Ingrese el concepto">
-                                </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label>
-                                    <i class="fas fa-hashtag"></i>
-                                    Cantidad
-                                </label>
-                                <div style="position: relative;">
-                                    <i class="fas fa-calculator input-icon"></i>
-                                    <input type="number" min="0" name="cantidad" required placeholder="Ej: 5">
-                                </div>
-                            </div>
 
                             <div class="form-group">
                                 <label>
@@ -441,12 +412,10 @@
                     const nombre = cells[1].textContent.toUpperCase();
                     const marca = cells[2].textContent.toUpperCase();
                     const modelo = cells[3].textContent.toUpperCase();
-                    const concepto = cells[6].textContent.toUpperCase();
 
                     showRow = nombre.includes(filter) ||
                         marca.includes(filter) ||
                         modelo.includes(filter) ||
-                        concepto.includes(filter);
                 }
 
                 if (showRow) {
