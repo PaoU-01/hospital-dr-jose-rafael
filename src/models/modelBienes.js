@@ -88,7 +88,7 @@ class ModelBienes {
             numero_identificacion, 
             departamento_id,
             costo) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             const params =
                 [bienes.nombre,
                 bienes.marca,
