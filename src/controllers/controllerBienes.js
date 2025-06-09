@@ -8,6 +8,18 @@ class ControllerBienes {
         this.modelBienes = new modelBienes();
     }
 
+    async cerrarSesion(req, res) {
+        try {
+            res.clearCookie('token');
+            res.redirect('/');
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+            res.status(500).send('Error al cerrar sesión');
+        }
+    }
+
+
+
     async getAllDepartamentos(req, res) {
         try {
             const departamentos = await this.modelBienes.getAllDepartamentos();

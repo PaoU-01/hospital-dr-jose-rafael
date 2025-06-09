@@ -14,7 +14,7 @@
     <div class="flex">
         <aside class="w-64 bg-gray-900 min-h-screen p-4 fixed">
             <div class="mb-6">
-                <img src="/images/logo-removebg-preview.png" alt="" class="w-28 h-28 mx-auto mb-4 yo">
+                <img src="/images/logo-removebg-preview.png" alt="" class="w-32 h-32 mx-auto mb-4 yo">
             </div>
 
             <nav>
@@ -45,6 +45,20 @@
                             class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
                             Bitácora
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/ayuda"
+                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                            <i class="fas fa-question text-gray-400 group-hover:text-white mr-3"></i>
+                            Ayuda
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/cerrar-sesion"
+                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                            <i class="fas fa-sign-out text-gray-400 group-hover:text-white mr-2"></i>
+                            Cerrar sesión
                         </a>
                     </li>
                 </ul>
@@ -273,8 +287,8 @@
                                     Incorporaciones
                                 </label>
                                 <div style="position: relative;">
-                                    <input type="number" name="incorporaciones" min="0" id="" placeholder="Ingrese la incorporación"
-                                        required>
+                                    <input type="number" name="incorporaciones" min="0" id=""
+                                        placeholder="Ingrese la incorporación" required>
                                 </div>
                             </div>
 
@@ -399,7 +413,7 @@
             const rows = tableBody.getElementsByTagName('tr');
             let hasResults = false;
 
-            // Eliminar mensajes anteriores de no resultados
+            // Eliminar mensajes de "sin resultados" previos
             const existingNoResults = tableBody.querySelectorAll('.no-results');
             existingNoResults.forEach(noResult => noResult.parentNode.remove());
 
@@ -407,15 +421,21 @@
                 const cells = rows[i].getElementsByTagName('td');
                 let showRow = false;
 
-                // Columnas a buscar: Nombre (1), Marca (2), Modelo (3), Concepto Movimiento (6)
-                if (cells.length > 6) {
+
+
+                if (cells.length >= 6) {
+                    const id = cells[0].textContent.toUpperCase();
                     const nombre = cells[1].textContent.toUpperCase();
                     const marca = cells[2].textContent.toUpperCase();
                     const modelo = cells[3].textContent.toUpperCase();
+                    const observaciones = cells[4].textContent.toUpperCase();
 
-                    showRow = nombre.includes(filter) ||
+                    // Buscar en todos los campos relevantes
+                    showRow = id.includes(filter) ||
+                        nombre.includes(filter) ||
                         marca.includes(filter) ||
                         modelo.includes(filter) ||
+                        observaciones.includes(filter);
                 }
 
                 if (showRow) {
@@ -426,11 +446,12 @@
                 }
             }
 
-            if (!hasResults) {
+            // Mostrar mensaje si no hay resultados
+            if (!hasResults && filter.length > 0) {
                 const noResultsRow = document.createElement('tr');
                 noResultsRow.innerHTML = `
-            <td colspan="8" class="no-results">
-                No se encontraron bienes que coincidan con la búsqueda
+            <td colspan="6" class="py-3 text-center text-gray-500 no-results">
+                No se encontraron bienes que coincidan con la búsqueda "${input.value}"
             </td>`;
                 tableBody.appendChild(noResultsRow);
             }

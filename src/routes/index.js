@@ -57,6 +57,13 @@ router.post('/bitacora/generar-excel', authenticateToken, async(req,res)=>{
 } );
 
 
+router.get('/cerrar-sesion', async(req,res) => {
+  controllerBienes.cerrarSesion(req,res);
+}
+);
+
+
+
 
 router.post('/login', (req, res) => {
   loginAuth(req, res);
