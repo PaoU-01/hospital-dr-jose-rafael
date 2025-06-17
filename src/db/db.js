@@ -24,7 +24,6 @@ function initializeDatabase() {
     `);
 */
 
- db.run(`DROP TABLE IF EXISTS auditoria`);
 
  db.run(`
     CREATE TABLE IF NOT EXISTS auditoria (

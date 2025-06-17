@@ -315,7 +315,7 @@ class ControllerBienes {
                 usuario_nombre: req.user.nombre,
                 usuario_rol: req.user.rol,
                 accion: `Exportó la bitácora del departamento ${departamento.nombre}`,
-                tabla_afectada: 'bienes'
+                tabla_afectada: 'Ninguna'
             });
 
 
