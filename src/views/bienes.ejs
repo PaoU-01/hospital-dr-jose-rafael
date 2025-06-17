@@ -126,7 +126,9 @@
                                 <th class="pb-3">Marca</th>
                                 <th class="pb-3">Modelo</th>
                                 <th class="pb-3">Observaciones</th>
+                                <% if (rol === '1') { %>
                                 <th class="pb-3">Acciones</th>
+                                <% } %>
                             </tr>
                         </thead>
                         <tbody id="bienesTableBody">
@@ -149,7 +151,6 @@
                                             <%= bienes[i].observaciones %>
                                         </td>
 
-                                        // Validar si es admin
 
                                         <% if (rol === '1') { %>
                                             <td class="py-3">
