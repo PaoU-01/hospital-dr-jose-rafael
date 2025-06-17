@@ -18,8 +18,6 @@ class ControllerBienes {
         }
     }
 
-
-
     async getAllDepartamentos(req, res) {
         try {
             const departamentos = await this.modelBienes.getAllDepartamentos();
@@ -45,6 +43,15 @@ class ControllerBienes {
         try {
             const bienes = req.body;
             await this.modelBienes.agregarBienes(bienes);
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Agregó un nuevo bien con el nombre de (${bienes.nombre || 'desconocido'})`,
+                tabla_afectada: 'bienes'
+            });
+
+
             res.redirect('/panel');
         } catch (error) {
             console.error('Error al agregar el bien:', error);
@@ -57,6 +64,14 @@ class ControllerBienes {
             const bienes = req.body;
             const { id } = req.params;
             await this.modelBienes.editarBienes(bienes, id);
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Editó el bien con ID ${id}`,
+                tabla_afectada: 'bienes'
+            });
+
             res.redirect('/panel');
         } catch (error) {
             console.error('Error al editar el bien:', error);
@@ -64,10 +79,29 @@ class ControllerBienes {
         }
     }
 
+
+    async mostrarAuditoria(req, res) {
+        const auditoria = await this.modelBienes.getAuditoria();
+        try {
+            res.render('auditoria', { auditoria, nombre: req.user.nombre });
+        } catch (error) {
+            console.error('Error al obtener la auditoría:', error);
+            res.status(500).send('Error al obtener la auditoría');
+        }
+    }
+
     async eliminarBienes(req, res) {
         try {
             const { id } = req.params;
             await this.modelBienes.eliminarBienes(id);
+
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Eliminó el bien con él ID ${id}`,
+                tabla_afectada: 'bienes'
+            });
             res.redirect('/panel');
         } catch (error) {
             console.error('Error al eliminar el bien:', error);
@@ -79,6 +113,14 @@ class ControllerBienes {
         try {
             const { id } = req.params;
             await this.modelBienes.deleteDepartamento(id);
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Eliminó el departamento con ID ${id}`,
+                tabla_afectada: 'departamentos'
+            });
+
             res.redirect('/departamentos');
         } catch (error) {
             console.error('Error al eliminar el departamento:', error);
@@ -94,6 +136,13 @@ class ControllerBienes {
                 clasificacion,
                 nombre,
                 dependencia
+            });
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Agregó un nuevo departamento con el nombre de (${nombre || 'desconocido'})`,
+                tabla_afectada: 'departamentos'
             });
             res.redirect('/departamentos');
         } catch (error) {
@@ -111,7 +160,13 @@ class ControllerBienes {
                 nombre,
                 dependencia
             });
-
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Editó el departamento con ID ${id}`,
+                tabla_afectada: 'departamentos'
+            });
             res.redirect('/departamentos');
         } catch (error) {
             console.error('Error al actualizar departamento:', error);
@@ -127,7 +182,6 @@ class ControllerBienes {
                 this.modelBienes.getPresupuestoTotal(),
                 this.modelBienes.getClasificacionTipo()
             ]);
-
             res.render('estadisticas', {
                 totalBienes,
                 presupuestoTotal,
@@ -152,43 +206,46 @@ class ControllerBienes {
     }
 
     async exportarBitacora(req, res) {
-    try {
-      const { departamento_id } = req.body;
-      const departamento = await this.modelBienes.getDepartamentoById(departamento_id);
-      const bienes = await this.modelBienes.getBienesPorDepartamento(departamento_id);
-      const workbook = new Excel.Workbook();
-      await workbook.xlsx.readFile(path.resolve(__dirname, 'BM1_2022-hospital.xlsx'));
-      const ws = workbook.getWorksheet('Hoja1');
-      ws.getCell('H8').value = departamento.nombre;
-      let fila = 15;
-      for (const b of bienes) {
-        ws.getCell(`A${fila}`).value = b.grupo;
-        ws.getCell(`B${fila}`).value = b.subgrupo;
-        ws.getCell(`C${fila}`).value = b.seccion;
-        ws.getCell(`D${fila}`).value = b.cantidad;
-        ws.getCell(`E${fila}`).value = b.numero_identificacion;
-        ws.getCell(`F${fila}`).value = b.estado;
-        ws.getCell(`G${fila}`).value = b.nombre;
-        ws.getCell(`H${fila}`).value = b.costo;
-        ws.getCell(`I${fila}`).value = b.cantidad * b.costo;
-        fila++;
-      }
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      res.setHeader('Content-Disposition', `attachment; filename=Bitacora_${departamento.nombre}.xlsx`);
+        try {
+            const { departamento_id } = req.body;
+            const departamento = await this.modelBienes.getDepartamentoById(departamento_id);
+            const bienes = await this.modelBienes.getBienesPorDepartamento(departamento_id);
 
-      await workbook.xlsx.write(res);
-      res.end();
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Error al generar la bitácora');
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Exportó la bitácora del departamento ${departamento.nombre}`,
+                tabla_afectada: 'bienes'
+            });
+
+
+            const workbook = new Excel.Workbook();
+            await workbook.xlsx.readFile(path.resolve(__dirname, 'BM1_2022-hospital.xlsx'));
+            const ws = workbook.getWorksheet('Hoja1');
+            ws.getCell('H8').value = departamento.nombre;
+            let fila = 15;
+            for (const b of bienes) {
+                ws.getCell(`A${fila}`).value = b.grupo;
+                ws.getCell(`B${fila}`).value = b.subgrupo;
+                ws.getCell(`C${fila}`).value = b.seccion;
+                ws.getCell(`D${fila}`).value = b.cantidad;
+                ws.getCell(`E${fila}`).value = b.numero_identificacion;
+                ws.getCell(`F${fila}`).value = b.estado;
+                ws.getCell(`G${fila}`).value = b.nombre;
+                ws.getCell(`H${fila}`).value = b.costo;
+                ws.getCell(`I${fila}`).value = b.cantidad * b.costo;
+                fila++;
+            }
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', `attachment; filename=Bitacora_${departamento.nombre}.xlsx`);
+            await workbook.xlsx.write(res);
+            res.end();
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al generar la bitácora');
+        }
     }
-  }
-
-
- 
-
-
-
 }
 
 module.exports = ControllerBienes;

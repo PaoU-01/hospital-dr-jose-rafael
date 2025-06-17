@@ -71,6 +71,18 @@ class ModelBienes {
         });
     }
 
+    getAuditoria() {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT * FROM auditoria', [], (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
     agregarBienes(bienes) {
         return new Promise((resolve, reject) => {
             const sql = `INSERT INTO bienes 
@@ -140,6 +152,25 @@ class ModelBienes {
             });
         })
     }
+
+    registrar({ usuario_cedula, usuario_nombre, usuario_rol, accion, tabla_afectada }) {
+    const sql = `
+      INSERT INTO auditoria (usuario_cedula, usuario_nombre, usuario_rol, accion, tabla_afectada)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    return new Promise((resolve, reject) => {
+      this.db.run(
+        sql,
+        [usuario_cedula, usuario_nombre, usuario_rol, accion, tabla_afectada],
+        function (err) {
+          if (err) reject(err);
+          else resolve(this.lastID);
+        }
+      );
+    });
+  }
+
+
 
 
     getTotalBienes() {

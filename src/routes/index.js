@@ -62,6 +62,10 @@ router.get('/cerrar-sesion', async(req,res) => {
 }
 );
 
+router.get('/auditoria', authenticateToken, async (req, res) => {
+  controllerBienes.mostrarAuditoria(req, res);
+}
+);
 
 
 

@@ -12,7 +12,6 @@ const db = new sqlite3.Database('./src/db/database.sql', (err) => {
 
 function initializeDatabase() {
 
-
     /*
     db.run(`
         CREATE TABLE IF NOT EXISTS users (
@@ -23,10 +22,21 @@ function initializeDatabase() {
             rol TEXT NOT NULL,
             password TEXT NOT NULL)
     `);
-
-
 */
 
+ db.run(`DROP TABLE IF EXISTS auditoria`);
+
+ db.run(`
+    CREATE TABLE IF NOT EXISTS auditoria (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fecha_hora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    usuario_cedula TEXT NOT NULL,
+    usuario_nombre TEXT NOT NULL,
+    usuario_rol TEXT NOT NULL,
+    accion TEXT NOT NULL,
+    tabla_afectada TEXT NOT NULL);
+`);
+ 
     db.run(`
     CREATE TABLE IF NOT EXISTS bienes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

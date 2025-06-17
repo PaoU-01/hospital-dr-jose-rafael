@@ -33,6 +33,13 @@
                             Departamentos
                         </a>
                     </li>
+                     <li>
+                        <a href="/usuarios"
+                            class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
+                            <i class="fas fa-users text-gray-400 group-hover:text-white mr-3"></i>
+                            Usuarios
+                        </a>
+                    </li>
                     <li>
                         <a href="/estadisticas"
                             class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
@@ -45,6 +52,14 @@
                             class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
                             Bitácora
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/auditoria"
+                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                            <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
+                            Auditoria
                         </a>
                     </li>
                     <li>
@@ -446,7 +461,6 @@
                 }
             }
 
-            // Mostrar mensaje si no hay resultados
             if (!hasResults && filter.length > 0) {
                 const noResultsRow = document.createElement('tr');
                 noResultsRow.innerHTML = `
@@ -457,7 +471,6 @@
             }
         }
 
-        // Opcional: Búsqueda al presionar Enter
         document.getElementById('searchBienesInput').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') searchBienes();
         });
