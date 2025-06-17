@@ -1,11 +1,105 @@
 const modelBienes = require('../models/modelBienes.js');
 const Excel = require('exceljs');
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
+const bcrypt = require('bcryptjs');
 
 class ControllerBienes {
     constructor() {
         this.modelBienes = new modelBienes();
+    }
+
+    async agregarUsuario(req, res) {
+        try {
+            const { cedula, email, nombre, rol, password } = req.body;
+
+            console.log(req.body);
+
+            if (!cedula || !email || !nombre || !rol || !password) {
+                return res.status(400).send('Todos los campos son obligatorios');
+            }
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            await this.modelBienes.createUsuario({ cedula, email, nombre, rol, password: hashedPassword });
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Agregó un nuevo usuario con el nombre de (${nombre || 'desconocido'})`,
+                tabla_afectada: 'usuarios'
+            });
+
+            res.redirect('/usuarios');
+        }
+        catch (error) {
+            console.error('Error al agregar el usuario:', error);
+            res.status(500).send('Error al agregar el usuario');
+        }
+    }
+
+
+    async editarUsuario(req, res) {
+        try {
+            const { id } = req.params;
+            const { cedula, email, nombre, rol, password } = req.body;
+            if (!cedula || !email || !nombre || !rol) {
+                return res.status(400).send('Todos los campos son obligatorios');
+            }
+
+            const updateData = { cedula, email, nombre, rol };
+
+            if (password) {
+                const saltRounds = 10;
+                updateData.password = await bcrypt.hash(password, saltRounds);
+            }else {
+                const usuario = await this.modelBienes.getUsuarioById(id);
+                updateData.password = usuario.password; 
+            }
+
+            await this.modelBienes.updateUsuario(id, updateData);
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Editó el usuario con ID ${id} (${nombre})`,
+                tabla_afectada: 'usuarios'
+            });
+
+            res.redirect('/usuarios');
+        } catch (error) {
+            console.error('Error al editar el usuario:', error);
+            res.status(500).send('Error al editar el usuario');
+        }
+    }
+    async eliminarUsuario(req, res) {
+        try {
+            const { id } = req.params;
+            await this.modelBienes.deleteUsuario(id);
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Eliminó el usuario con ID ${id}`,
+                tabla_afectada: 'usuarios'
+            });
+            res.redirect('/usuarios');
+        }
+        catch (error) {
+            console.error('Error al eliminar el usuario:', error);
+            res.status(500).send('Error al eliminar el usuario');
+        }
+    }
+
+
+    async mostrarUsuarios(req, res) {
+        try {
+
+            const usuarios = await this.modelBienes.getUsuarios();
+            res.render('usuarios', { nombre: req.user.nombre, usuarios });
+        } catch (error) {
+            console.error('Error al obtener los usuarios:', error);
+            res.status(500).send('Error al obtener los usuarios');
+        }
     }
 
     async cerrarSesion(req, res) {
@@ -18,10 +112,14 @@ class ControllerBienes {
         }
     }
 
+
+
+
+
     async getAllDepartamentos(req, res) {
         try {
             const departamentos = await this.modelBienes.getAllDepartamentos();
-            res.render('departamentos', { nombre: req.user.nombre, departamentos })
+            res.render('departamentos', { nombre: req.user.nombre, rol: req.user.rol, departamentos })
         } catch (error) {
             console.error('Error al obtener los departamentos:', error);
             res.status(500).send('Error al obtener los departamentos');
@@ -32,7 +130,7 @@ class ControllerBienes {
         try {
             const bienes = await this.modelBienes.getAllBienes();
             const departamentos = await this.modelBienes.getAllDepartamentos();
-            res.render('bienes', { nombre: req.user.nombre, bienes, departamentos });
+            res.render('bienes', { nombre: req.user.nombre, bienes, rol: req.user.rol, departamentos });
         } catch (error) {
             console.error('Error al obtener los bienes:', error);
             res.status(500).send('Error al obtener los bienes');
@@ -83,7 +181,7 @@ class ControllerBienes {
     async mostrarAuditoria(req, res) {
         const auditoria = await this.modelBienes.getAuditoria();
         try {
-            res.render('auditoria', { auditoria, nombre: req.user.nombre });
+            res.render('auditoria', { auditoria, rol: req.user.rol, nombre: req.user.nombre });
         } catch (error) {
             console.error('Error al obtener la auditoría:', error);
             res.status(500).send('Error al obtener la auditoría');
@@ -183,6 +281,7 @@ class ControllerBienes {
                 this.modelBienes.getClasificacionTipo()
             ]);
             res.render('estadisticas', {
+                rol: req.user.rol,
                 totalBienes,
                 presupuestoTotal,
                 clasificacionTipo,
@@ -198,7 +297,7 @@ class ControllerBienes {
     async mostrarFormulario(req, res) {
         try {
             const departamentos = await this.modelBienes.getAllDepartamentos();
-            res.render('bitacora', { departamentos });
+            res.render('bitacora', { departamentos,rol: req.user.rol });
         } catch (error) {
             console.error('Error:', error);
             res.status(500).send('Error al cargar el formulario');

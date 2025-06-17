@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const loginAuth = require('../controllers/loginController.js');
-const authenticateToken = require('../middleware/auth.js');
+const { authenticateToken, authorizeAdmin } = require('../middleware/auth.js');
 const ControllerBienes = require('../controllers/controllerBienes.js');
 
 const controllerBienes = new ControllerBienes();
@@ -52,9 +52,32 @@ router.get('/bitacora', authenticateToken, async (req, res) => {
 })
 
 
+router.get('/usuarios', authenticateToken, authorizeAdmin, async (req, res) => {
+  controllerBienes.mostrarUsuarios(req, res);
+});
+
+
 router.post('/bitacora/generar-excel', authenticateToken, async(req,res)=>{
   controllerBienes.exportarBitacora(req,res);
 } );
+
+
+router.post('/usuarios/agregar', authenticateToken, authorizeAdmin, async (req, res) => {
+  controllerBienes.agregarUsuario(req, res);
+}
+);
+
+
+router.post('/usuarios/editar/:id', authenticateToken, authorizeAdmin, async (req, res) => {
+  controllerBienes.editarUsuario(req, res);
+}
+);
+
+
+router.post('/usuarios/eliminar/:id', authenticateToken, authorizeAdmin, async (req, res) => {
+  controllerBienes.eliminarUsuario(req, res);
+}
+);
 
 
 router.get('/cerrar-sesion', async(req,res) => {
@@ -62,7 +85,7 @@ router.get('/cerrar-sesion', async(req,res) => {
 }
 );
 
-router.get('/auditoria', authenticateToken, async (req, res) => {
+router.get('/auditoria', authenticateToken, authorizeAdmin, async (req, res) => {
   controllerBienes.mostrarAuditoria(req, res);
 }
 );

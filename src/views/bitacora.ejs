@@ -30,13 +30,17 @@
                             Departamentos
                         </a>
                     </li>
-                     <li>
+                     <% if (rol === '1') { %>
+                    <li>
+                       
                         <a href="/usuarios"
                             class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-users text-gray-400 group-hover:text-white mr-3"></i>
                             Usuarios
                         </a>
+                        
                     </li>
+                    <% } %>
                     <li>
                         <a href="/estadisticas"
                             class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
@@ -51,6 +55,7 @@
                             Bitácora
                         </a>
                     </li>
+                    <% if (rol === '1') { %>
                       <li>
                         <a href="/auditoria"
                             class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
@@ -58,6 +63,7 @@
                             Auditoria
                         </a>
                     </li>
+                    <% } %>
                     <li>
                         <a href="/ayuda"
                             class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">

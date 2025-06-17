@@ -14,4 +14,13 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-module.exports = authenticateToken;
+
+function authorizeAdmin(req, res, next) {
+    if (req.user && req.user.rol === '1') {
+        next();
+    } else {
+        res.redirect('/panel')
+    }
+}
+
+module.exports = { authenticateToken, authorizeAdmin };

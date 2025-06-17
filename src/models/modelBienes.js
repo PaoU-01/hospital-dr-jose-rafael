@@ -112,7 +112,7 @@ class ModelBienes {
                 bienes.observaciones,
                 bienes.seccion,
                 bienes.estado,
-                1, 
+                    1,
                 bienes.numero_identificacion,
                 bienes.departamento_id,
                 bienes.costo];
@@ -154,21 +154,21 @@ class ModelBienes {
     }
 
     registrar({ usuario_cedula, usuario_nombre, usuario_rol, accion, tabla_afectada }) {
-    const sql = `
+        const sql = `
       INSERT INTO auditoria (usuario_cedula, usuario_nombre, usuario_rol, accion, tabla_afectada)
       VALUES (?, ?, ?, ?, ?)
     `;
-    return new Promise((resolve, reject) => {
-      this.db.run(
-        sql,
-        [usuario_cedula, usuario_nombre, usuario_rol, accion, tabla_afectada],
-        function (err) {
-          if (err) reject(err);
-          else resolve(this.lastID);
-        }
-      );
-    });
-  }
+        return new Promise((resolve, reject) => {
+            this.db.run(
+                sql,
+                [usuario_cedula, usuario_nombre, usuario_rol, accion, tabla_afectada],
+                function (err) {
+                    if (err) reject(err);
+                    else resolve(this.lastID);
+                }
+            );
+        });
+    }
 
 
 
@@ -227,30 +227,145 @@ class ModelBienes {
 
 
     getDepartamentoById(id) {
-    return new Promise((resolve, reject) => {
-      this.db.get(
-        'SELECT * FROM departamentos WHERE id = ?',
-        [id],
-        (err, row) => (err ? reject(err) : resolve(row))
-      );
-    });
-  }
+        return new Promise((resolve, reject) => {
+            this.db.get(
+                'SELECT * FROM departamentos WHERE id = ?',
+                [id],
+                (err, row) => (err ? reject(err) : resolve(row))
+            );
+        });
+    }
 
-  getBienesPorDepartamento(deptoId) {
-    return new Promise((resolve, reject) => {
-      this.db.all(
-        `SELECT 
+    getBienesPorDepartamento(deptoId) {
+        return new Promise((resolve, reject) => {
+            this.db.all(
+                `SELECT 
            nombre, marca, modelo, grupo, subgrupo, numero_serie,
            incorporaciones, observaciones, seccion, estado,
            cantidad, numero_identificacion, costo
          FROM bienes
          WHERE departamento_id = ?`,
-        [deptoId],
-        (err, rows) => (err ? reject(err) : resolve(rows))
-      );
-    });
-  }
+                [deptoId],
+                (err, rows) => (err ? reject(err) : resolve(rows))
+            );
+        });
+    }
 
+
+
+
+
+    getUsuarios() {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT * FROM users', [], (err, rows) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
+
+    getUsuarioById(id) {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT * FROM users WHERE id = ?', [id], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row);
+                }
+            });
+        });
+    }
+
+    getUsuarioByCedula(cedula) {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT * FROM users WHERE cedula = ?', [cedula], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row);
+                }
+            });
+        });
+    }
+
+    getUsuarioByEmail(email) {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row);
+                }
+            });
+        });
+    }
+
+    createUsuario({ cedula, email, nombre, rol, password }) {
+        return new Promise((resolve, reject) => {
+            const sql = `INSERT INTO users (cedula, email, nombre, rol, password) 
+                     VALUES (?, ?, ?, ?, ?)`;
+
+            this.db.run(sql, [cedula, email, nombre, rol, password], function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve({
+                        id: this.lastID,
+                        cedula,
+                        email,
+                        nombre,
+                        rol,
+                        password
+                    });
+                }
+            });
+        });
+    }
+
+    // En src/models/modelBienes.js
+    updateUsuario(id, updates) {
+        return new Promise((resolve, reject) => {
+            const { cedula, email, nombre, rol, password } = updates;
+
+            const sql = `
+            UPDATE users 
+            SET cedula = ?, 
+                email = ?, 
+                nombre = ?, 
+                rol = ?, 
+                password = ? 
+            WHERE id = ?
+        `;
+
+            this.db.run(sql, [cedula, email, nombre, rol, password, id], function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(this.changes);
+                }
+            });
+        });
+    }
+
+    // Eliminar usuario
+    deleteUsuario(id) {
+        return new Promise((resolve, reject) => {
+            this.db.run('DELETE FROM users WHERE id = ?', [id], function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve({
+                        id,
+                        changes: this.changes
+                    });
+                }
+            });
+        });
+    }
 
 
 

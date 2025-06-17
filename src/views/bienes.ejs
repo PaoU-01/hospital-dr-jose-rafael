@@ -33,12 +33,14 @@
                             Departamentos
                         </a>
                     </li>
-                     <li>
+                    <li>
+                        <% if (rol === '1') { %>
                         <a href="/usuarios"
                             class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-users text-gray-400 group-hover:text-white mr-3"></i>
                             Usuarios
                         </a>
+                        <% } %>
                     </li>
                     <li>
                         <a href="/estadisticas"
@@ -54,13 +56,15 @@
                             Bitácora
                         </a>
                     </li>
-                    
+
                     <li>
+                        <% if (rol === '1') { %>
                         <a href="/auditoria"
                             class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
                             Auditoria
                         </a>
+                        <% } %>
                     </li>
                     <li>
                         <a href="/ayuda"
@@ -96,11 +100,13 @@
                         Gestión de Bienes
                     </h1>
                 </div>
+                <% if (rol === '1') { %>
                 <button onclick="openModal()"
                     class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center mb-4">
                     <i class="fas fa-plus-circle mr-2"></i>
                     Agregar un bien
                 </button>
+                <% } %>
             </div>
             <div class="search-container mb-6">
                 <i class="fas fa-search search-icon"></i>
@@ -143,14 +149,17 @@
                                             <%= bienes[i].observaciones %>
                                         </td>
 
-                                        <td class="py-3">
-                                            <button onclick="openEditModal(
-                                          '<%= bienes[i].id %>',
-                                          '<%= bienes[i].nombre %>',
-                                          '<%= bienes[i].marca %>',
-                                          '<%= bienes[i].modelo %>',
-                                          '<%= bienes[i].grupo %>',
-                                          '<%= bienes[i].subgrupo %>',
+                                        // Validar si es admin
+
+                                        <% if (rol === '1') { %>
+                                            <td class="py-3">
+                                                <button onclick="openEditModal(
+                                                  '<%= bienes[i].id %>',
+                                                  '<%= bienes[i].nombre %>',
+                                                  '<%= bienes[i].marca %>',
+                                                  '<%= bienes[i].modelo %>',
+                                                  '<%= bienes[i].grupo %>',
+                                                  '<%= bienes[i].subgrupo %>',
                                           '<%= bienes[i].numero_serie %>',
                                           '<%= bienes[i].incorporaciones %>',
                                           '<%= bienes[i].observaciones %>',
@@ -160,13 +169,14 @@
                                           '<%= bienes[i].departamento_id %>',
                                           '<%= bienes[i].costo %>'
                                         )" class="text-blue-500 hover:text-blue-700 mr-2">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button onclick="confirmDelete('<%= bienes[i].id %>')"
-                                                class="text-red-500 hover:text-red-700">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </td>
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button onclick="confirmDelete('<%= bienes[i].id %>')"
+                                                    class="text-red-500 hover:text-red-700">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </td>
+                                            <% } %>
                                     </tr>
                                     <% } %>
                                         <% } else { %>
