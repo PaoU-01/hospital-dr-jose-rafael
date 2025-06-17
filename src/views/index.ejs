@@ -1,110 +1,224 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Inicio de sesión</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link rel="stylesheet" href="/stylesheets/all.min.css">
-  </head>
-  <style>
-#submitBtn:disabled {
-  background-color: #9ca3af; 
-  cursor: not-allowed;
-  opacity: 0.9;
-}
 
-#submitBtn:not(:disabled) {
-  background-color: #3b82f6; 
-  cursor: pointer;
-}
+<head>
+  <title>Inicio de sesión</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel="stylesheet" href="/stylesheets/all.min.css">
+</head>
+<style>
+  #submitBtn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.9;
+  }
 
-#submitBtn:not(:disabled):hover {
-  background-color: #2563eb; 
-}
+  #submitBtn:not(:disabled) {
+    background-color: #3b82f6;
+    cursor: pointer;
+  }
 
-#submitBtn {
-  transition: background-color 0.3s ease;
-}
-  </style>
-  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
-    <div class="container mx-auto px-4">
-        <form class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8" action="/login" method="POST">
-          <div class="mb-6">
-            <img src="/images/logo-removebg-preview.png" alt="" class="w-40 h-40 mx-auto mb-4">
-          </div>
-            <div class="mb-4 relative">
-                <label class="block text-gray-700 text-sm font-semibold mb-2" for="email">
-                    Correo electrónico
-                </label>
-                <div class="relative">
-                    <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    <input 
-                        type="email" 
-                        id="email"
-                        class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="tucorreo@example.com"
-                        required
-                        name="email"
-                    >
-                </div>
-            </div>
-            <div class="mb-6 relative">
-                <label class="block text-gray-700 text-sm font-semibold mb-2" for="password">
-                    Contraseña
-                </label>
-                <div class="relative">
-                    <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    <i class="fas fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-blue-500" 
-                       id="togglePassword"></i>
-                    <input 
-                        type="password" 
-                        id="password"
-                        class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="••••••••"
-                        required
-                        minlength="6"
-                        name="password"
-                    >
-                </div>
-            </div>
-            <div class="flex mb-6">
-                <a href="#" class="text-sm text-blue-500 hover:text-blue-700">
-                    <i class="fas fa-key mr-1"></i>¿Olvidaste tu contraseña?
-                </a>
-            </div>
-            <button 
-                type="submit"
-                id="submitBtn"
-                class="w-full bg-blue-500 text-white py-2 px-4 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:cursor-not-allowed"
-                disabled
-            >
-                <i class="fas fa-sign-in-alt mr-2"></i>Ingresar
-            </button>
+  #submitBtn:not(:disabled):hover {
+    background-color: #2563eb;
+  }
 
-        </form>
-    </div>
+  #submitBtn {
+    transition: background-color 0.3s ease;
+  }
 
-    <script>
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const submitBtn = document.getElementById('submitBtn');
-        const togglePassword = document.getElementById('togglePassword');
+  /* Estilos para notificaciones */
+  .notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    z-index: 3000;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .notification.success {
+    background: #10b981;
+  }
+  
+  .notification.error {
+    background: #ef4444;
+  }
+  
+  .notification i {
+    font-size: 1.2rem;
+  }
 
-        // Validación de formulario
-        function validateForm() {
-            submitBtn.disabled = !(emailInput.checkValidity() && passwordInput.checkValidity());
-        }
+  /* Loading spinner */
+  .spinner {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3b82f6;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 8px;
+  }
 
-        // Toggle para mostrar/ocultar contraseña
-        togglePassword.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.classList.toggle('fa-eye-slash');
-            this.classList.toggle('fa-eye');
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="container mx-auto px-4">
+    <form class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8" id="loginForm">
+      <div class="mb-6">
+        <img src="/images/logo-removebg-preview.png" alt="" class="w-40 h-40 mx-auto mb-4">
+      </div>
+      <div class="mb-4 relative">
+        <label class="block text-gray-700 text-sm font-semibold mb-2" for="email">
+          Correo electrónico
+        </label>
+        <div class="relative">
+          <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          <input type="email" id="email"
+            class="w-full pl-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="tucorreo@example.com" required name="email">
+        </div>
+      </div>
+      <div class="mb-6 relative">
+        <label class="block text-gray-700 text-sm font-semibold mb-2" for="password">
+          Contraseña
+        </label>
+        <div class="relative">
+          <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          <i class="fas fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 cursor-pointer hover:text-blue-500"
+            id="togglePassword"></i>
+          <input type="password" id="password"
+            class="w-full pl-10 pr-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="••••••••" required minlength="6" name="password">
+        </div>
+      </div>
+      <div class="flex mb-6">
+        <a href="#" class="text-sm text-blue-500 hover:text-blue-700">
+          <i class="fas fa-key mr-1"></i>¿Olvidaste tu contraseña?
+        </a>
+      </div>
+      <button type="submit" id="submitBtn"
+        class="w-full bg-blue-500 text-white py-2 px-4 rounded-md transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:hover:bg-gray-400 disabled:cursor-not-allowed"
+        disabled>
+        <span id="btnText">
+          <i class="fas fa-sign-in-alt mr-2"></i>Ingresar
+        </span>
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submitBtn');
+    const togglePassword = document.getElementById('togglePassword');
+    const loginForm = document.getElementById('loginForm');
+    const btnText = document.getElementById('btnText');
+
+    // Validación de formulario
+    function validateForm() {
+      submitBtn.disabled = !(emailInput.checkValidity() && passwordInput.checkValidity());
+    }
+
+    // Toggle para mostrar/ocultar contraseña
+    togglePassword.addEventListener('click', function () {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('fa-eye-slash');
+      this.classList.toggle('fa-eye');
+    });
+
+    // Event listeners para validación
+    emailInput.addEventListener('input', validateForm);
+    passwordInput.addEventListener('input', validateForm);
+
+    // Función para mostrar notificaciones
+    function showNotification(message, type) {
+      // Eliminar notificaciones anteriores
+      const existingNotifications = document.querySelectorAll('.notification');
+      existingNotifications.forEach(notification => notification.remove());
+
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        ${message}
+      `;
+
+      document.body.appendChild(notification);
+
+      // Animación para mostrar
+      setTimeout(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateY(0)';
+      }, 10);
+
+      // Ocultar después de 3 segundos
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateY(-20px)';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Manejar el envío del formulario
+    loginForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      submitBtn.disabled = true;
+      btnText.innerHTML = '<div class="spinner"></div>Iniciando sesión...';
+      
+      const formData = new FormData(loginForm);
+      const loginData = {
+        email: formData.get('email'),
+        password: formData.get('password')
+      };
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(loginData)
         });
 
-        // Event listeners
-        emailInput.addEventListener('input', validateForm);
-        passwordInput.addEventListener('input', validateForm);
-    </script>
+        const result = await response.json();
+
+        if (response.ok) {
+            window.location.href = '/panel';
+        } else {
+          showNotification(result.error || 'Error al iniciar sesión', 'error');
+          
+          submitBtn.disabled = false;
+          btnText.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Ingresar';
+          validateForm(); 
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showNotification('Error de conexión. Intenta nuevamente.', 'error');
+        
+        submitBtn.disabled = false;
+        btnText.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Ingresar';
+        validateForm();
+      }
+    });
+
+    validateForm();
+  </script>
 </body>
+
 </html>

@@ -222,52 +222,46 @@
                             Departamentos
                         </a>
                     </li>
-                    <% if (rol === '1') { %>
-                     <li>
-                        <a href="/usuarios"
-                            class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-users text-gray-400 group-hover:text-white mr-3"></i>
-                            Usuarios
-                        </a>
-                    </li>
-                    <% } %>
-                    <li>
-                        <a href="/estadisticas"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-chart-bar text-gray-400 group-hover:text-white mr-3"></i>
-                            Estadísticas
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/bitacora"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
-                            Bitácora
-                        </a>
-                    </li>
-                    <% if (rol === '1') { %>
-                      <li>
-                        <a href="/auditoria"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
-                            Auditoria
-                        </a>
-                    </li>
-                    <% } %>
-                    <li>
-                        <a href="/ayuda"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-question text-gray-400 group-hover:text-white mr-3"></i>
-                            Ayuda
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/cerrar-sesion"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-sign-out text-gray-400 group-hover:text-white mr-2"></i>
-                            Cerrar sesión
-                        </a>
-                    </li>
+                    <% if (rol==='1' ) { %>
+                        <li>
+                            <a href="/usuarios"
+                                class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
+                                <i class="fas fa-users text-gray-400 group-hover:text-white mr-3"></i>
+                                Usuarios
+                            </a>
+                        </li>
+                        <% } %>
+                            <li>
+                                <a href="/estadisticas"
+                                    class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                                    <i class="fas fa-chart-bar text-gray-400 group-hover:text-white mr-3"></i>
+                                    Estadísticas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/bitacora"
+                                    class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                                    <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
+                                    Bitácora
+                                </a>
+                            </li>
+                            <% if (rol==='1' ) { %>
+                                <li>
+                                    <a href="/auditoria"
+                                        class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                                        <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
+                                        Auditoria
+                                    </a>
+                                </li>
+                                <% } %>
+
+                                    <li>
+                                        <a href="/cerrar-sesion"
+                                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                                            <i class="fas fa-sign-out text-gray-400 group-hover:text-white mr-2"></i>
+                                            Cerrar sesión
+                                        </a>
+                                    </li>
                 </ul>
             </nav>
         </aside>
@@ -288,13 +282,86 @@
                         Gestión de Departamentos
                     </h1>
                 </div>
-                <% if (rol === '1') { %>
-                <button onclick="openClasificacionModal()"
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center mb-4">
-                    <i class="fas fa-plus-circle mr-2"></i>
-                    Agregar un departamento
-                </button>
-                <% } %>
+
+                <div class="flex items-center gap-3">
+                    <!-- Botón de Ayuda -->
+                    <button onclick="showDepartmentHelp()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
+                        title="Ver información del módulo">
+                        <i class="fas fa-question-circle mr-2"></i>
+                        Ayuda
+                    </button>
+
+                    <!-- Botón Agregar (solo para rol 1) -->
+                    <% if (rol==='1' ) { %>
+                        <button onclick="openClasificacionModal()"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-plus-circle mr-2"></i>
+                            Agregar un departamento
+                        </button>
+                        <% } %>
+                </div>
+            </div>
+
+            <!-- Modal de Ayuda para Departamentos -->
+            <div id="departmentHelpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+                <div class="flex items-center justify-center min-h-screen p-4">
+                    <div class="bg-white rounded-lg max-w-md w-full p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                                Información del Módulo
+                            </h3>
+                            <button onclick="closeDepartmentHelp()" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="font-medium text-gray-700">Gestión de Departamentos</h4>
+                            <p class="text-sm text-gray-600">
+                                Este módulo te permite administrar los departamentos o áreas de la organización.
+                            </p>
+
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-blue-800 mb-2">Funcionalidades disponibles:</h5>
+                                <ul class="text-sm text-blue-700 space-y-1">
+                                    <li><i class="fas fa-search mr-2"></i>Buscar y consultar departamentos</li>
+                                    <li><i class="fas fa-eye mr-2"></i>Ver información detallada</li>
+                                    <% if (rol==='1' ) { %>
+                                        <li><i class="fas fa-plus mr-2"></i>Crear nuevos departamentos</li>
+                                        <li><i class="fas fa-edit mr-2"></i>Editar información de departamentos</li>
+                                        <li><i class="fas fa-trash mr-2"></i>Eliminar departamentos</li>
+                                        <% } %>
+                                </ul>
+                            </div>
+
+                            <% if (rol==='2' ) { %>
+                                <div class="bg-yellow-50 p-3 rounded-lg">
+                                    <p class="text-sm text-yellow-700">
+                                        <i class="fas fa-info-circle mr-2"></i>
+                                        Tu rol actual solo permite consultar información de departamentos.
+                                    </p>
+                                </div>
+                                <% } %>
+
+                                    <div class="bg-green-50 p-3 rounded-lg">
+                                        <h5 class="font-medium text-green-800 mb-1">Utilidad:</h5>
+                                        <p class="text-sm text-green-700">
+                                            Los departamentos se utilizan para organizar y clasificar los bienes según
+                                            su ubicación o área responsable.
+                                        </p>
+                                    </div>
+                        </div>
+
+                        <div class="mt-6 flex justify-end">
+                            <button onclick="closeDepartmentHelp()"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                                Entendido
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="search-container mb-6">
@@ -313,9 +380,9 @@
                                 <th class="pb-3">Clasificación</th>
                                 <th class="pb-3">Departamento</th>
                                 <th class="pb-3">Dependencia</th>
-                                <% if (rol === '1') { %>
-                                <th class="pb-3">Acciones</th>
-                                <% } %>
+                                <% if (rol==='1' ) { %>
+                                    <th class="pb-3">Acciones</th>
+                                    <% } %>
                             </tr>
                         </thead>
                         <tbody id="departmentsTableBody"> <!-- Agrega este id -->
@@ -331,14 +398,14 @@
                                         <td class="dependencia">
                                             <%= departamentos[i].dependencia %>
                                         </td>
-                                        <% if (rol === '1') { %>
-                                        <td class="flex items-center">
-                                            <button class="text-blue-500 hover:text-blue-700 mt-4 edit-btn">
-                                                <i class="fas fa-edit"></i>
-                                                Editar
-                                            </button>
-                                        </td>
-                                        <% } %>
+                                        <% if (rol==='1' ) { %>
+                                            <td class="flex items-center">
+                                                <button class="text-blue-500 hover:text-blue-700 mt-4 edit-btn">
+                                                    <i class="fas fa-edit"></i>
+                                                    Editar
+                                                </button>
+                                            </td>
+                                            <% } %>
 
                                     </tr>
                                     <% } %>
@@ -491,6 +558,23 @@
 
     </script>
     <script src="/javascripts/scriptDepartamentos.js">
+    </script>
+
+    <script>
+        function showDepartmentHelp() {
+            document.getElementById('departmentHelpModal').classList.remove('hidden');
+        }
+
+        function closeDepartmentHelp() {
+            document.getElementById('departmentHelpModal').classList.add('hidden');
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        document.getElementById('departmentHelpModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeDepartmentHelp();
+            }
+        });
     </script>
 
 </body>

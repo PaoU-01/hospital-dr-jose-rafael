@@ -283,13 +283,6 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/ayuda"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-question text-gray-400 group-hover:text-white mr-3"></i>
-                            Ayuda
-                        </a>
-                    </li>
-                    <li>
                         <a href="/cerrar-sesion"
                             class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
                             <i class="fas fa-sign-out text-gray-400 group-hover:text-white mr-2"></i>
@@ -304,25 +297,96 @@
         <main class="ml-64 p-8 w-full">
             <!-- Header -->
             <div class="flex justify-between items-center mb-8">
-                <div>
-                    <p class="text-sm text-gray-500 mb-5">
-                        Bienvenido/a,
-                        <span class="font-semibold text-blue-600">
-                            <!-- <%= nombre %> -->
-                            Administrador
-                        </span>
-                    </p>
-                    <h1 class="text-2xl font-bold text-gray-800">
-                        <i class="fas fa-users mr-2 text-blue-500"></i>
-                        Gestión de Usuarios
-                    </h1>
-                </div>
-                <button onclick="openUsuarioModal()"
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center mb-4">
-                    <i class="fas fa-user-plus mr-2"></i>
-                    Agregar Usuario
+    <div>
+        <p class="text-sm text-gray-500 mb-5">
+            Bienvenido/a,
+            <span class="font-semibold text-blue-600">
+                <!-- <%= nombre %> -->
+                Administrador
+            </span>
+        </p>
+        <h1 class="text-2xl font-bold text-gray-800">
+            <i class="fas fa-users mr-2 text-blue-500"></i>
+            Gestión de Usuarios
+        </h1>
+    </div>
+    
+    <div class="flex items-center gap-3">
+        <!-- Botón de Ayuda -->
+        <button onclick="showUsersHelp()"
+            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
+            title="Ver información del módulo">
+            <i class="fas fa-question-circle mr-2"></i>
+            Ayuda
+        </button>
+        
+        <!-- Botón Agregar Usuario -->
+        <button onclick="openUsuarioModal()"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+            <i class="fas fa-user-plus mr-2"></i>
+            Agregar Usuario
+        </button>
+    </div>
+</div>
+
+<!-- Modal de Ayuda para Gestión de Usuarios -->
+<div id="usersHelpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg max-w-lg w-full p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">
+                    <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                    Información del Módulo
+                </h3>
+                <button onclick="closeUsersHelp()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
+            
+            <div class="space-y-3">
+                <h4 class="font-medium text-gray-700">Gestión de Usuarios</h4>
+                <p class="text-sm text-gray-600">
+                    Este módulo te permite administrar todos los usuarios del sistema y controlar sus permisos de acceso.
+                </p>
+                
+                <div class="bg-blue-50 p-3 rounded-lg">
+                    <h5 class="font-medium text-blue-800 mb-2">Funcionalidades disponibles:</h5>
+                    <ul class="text-sm text-blue-700 space-y-1">
+                        <li><i class="fas fa-user-plus mr-2"></i>Crear nuevos usuarios</li>
+                        <li><i class="fas fa-edit mr-2"></i>Editar información de usuarios</li>
+                        <li><i class="fas fa-user-times mr-2"></i>Eliminar usuarios</li>
+                        <li><i class="fas fa-key mr-2"></i>Asignar y modificar roles de usuario</li>
+                        <li><i class="fas fa-search mr-2"></i>Buscar y filtrar usuarios</li>
+                        <li><i class="fas fa-shield-alt mr-2"></i>Resetear contraseñas</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-green-50 p-3 rounded-lg">
+                    <h5 class="font-medium text-green-800 mb-2">Tipos de Roles:</h5>
+                    <ul class="text-sm text-green-700 space-y-1">
+                        <li><i class="fas fa-crown mr-2"></i><strong>Rol 1 (Administrador):</strong> Acceso completo a todos los módulos.</li>
+                        <li><i class="fas fa-user mr-2"></i><strong>Rol 2 (Usuario):</strong> Solo consulta de bienes y departamentos y exportar bitacoras.</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-red-50 p-3 rounded-lg">
+                    <p class="text-sm text-red-700">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        <strong>Módulo crítico:</strong> Solo administradores pueden acceder. Los cambios en usuarios afectan la seguridad del sistema.
+                    </p>
+                </div>
+                
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeUsersHelp()" 
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
             <div class="search-container mb-6">
                 <i class="fas fa-search search-icon"></i>
@@ -717,6 +781,22 @@
         }
     `;
     document.head.appendChild(style);
+</script>
+<script>
+function showUsersHelp() {
+    document.getElementById('usersHelpModal').classList.remove('hidden');
+}
+
+function closeUsersHelp() {
+    document.getElementById('usersHelpModal').classList.add('hidden');
+}
+
+// Cerrar modal al hacer clic fuera de él
+document.getElementById('usersHelpModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeUsersHelp();
+    }
+});
 </script>
 </body>
 

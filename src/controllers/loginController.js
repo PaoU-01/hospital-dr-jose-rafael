@@ -2,6 +2,8 @@ const db = require('../db/db.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+
+
 const loginAuth = (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -29,7 +31,16 @@ const loginAuth = (req, res) => {
             );
 
             res.cookie('token', token, { httpOnly: true });
-            res.redirect('/panel');
+            res.status(200).json({
+                success: true,
+                message: 'Inicio de sesión exitoso',
+                user: {
+                    id: user.id,
+                    nombre: user.nombre,
+                    email: user.email,
+                    rol: user.rol
+                }
+            });
         } catch (error) {
             res.status(500).json({ error: 'Error en el servidor' });
         }

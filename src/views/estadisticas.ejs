@@ -62,59 +62,53 @@
                             Departamentos
                         </a>
                     </li>
-                    <% if (rol === '1') { %>
-                    <li>
-                        <a href="/usuarios"
-                            class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-users text-gray-400 group-hover:text-white mr-3"></i>
-                            Usuarios
-                        </a>
-                    </li>
-                    <% } %>
-                    <li>
-                        <a href="#"
-                            class="flex items-center bg-blue-800  p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-chart-bar text-gray-400 group-hover:text-white mr-3"></i>
-                            Estadísticas
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/bitacora"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
-                            Bitácora
-                        </a>
-                    </li>
-                    <% if (rol === '1') { %>
-                    <li>
-                        <a href="/auditoria"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
-                            Auditoria
-                        </a>
-                    </li>
-                    <% } %>
-                    <li>
-                        <a href="/ayuda"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-question text-gray-400 group-hover:text-white mr-3"></i>
-                            Ayuda
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/cerrar-sesion"
-                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
-                            <i class="fas fa-sign-out text-gray-400 group-hover:text-white mr-2"></i>
-                            Cerrar sesión
-                        </a>
-                    </li>
+                    <% if (rol==='1' ) { %>
+                        <li>
+                            <a href="/usuarios"
+                                class="flex items-center p-3 text-gray-300  hover:text-white hover:bg-blue-800 rounded-lg group">
+                                <i class="fas fa-users text-gray-400 group-hover:text-white mr-3"></i>
+                                Usuarios
+                            </a>
+                        </li>
+                        <% } %>
+                            <li>
+                                <a href="#"
+                                    class="flex items-center bg-blue-800  p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                                    <i class="fas fa-chart-bar text-gray-400 group-hover:text-white mr-3"></i>
+                                    Estadísticas
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/bitacora"
+                                    class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                                    <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
+                                    Bitácora
+                                </a>
+                            </li>
+                            <% if (rol==='1' ) { %>
+                                <li>
+                                    <a href="/auditoria"
+                                        class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                                        <i class="fas fa-clipboard-list text-gray-400 group-hover:text-white mr-3"></i>
+                                        Auditoria
+                                    </a>
+                                </li>
+                                <% } %>
+
+                                    <li>
+                                        <a href="/cerrar-sesion"
+                                            class="flex items-center p-3 text-gray-300 hover:text-white hover:bg-blue-800 rounded-lg group">
+                                            <i class="fas fa-sign-out text-gray-400 group-hover:text-white mr-2"></i>
+                                            Cerrar sesión
+                                        </a>
+                                    </li>
                 </ul>
             </nav>
         </aside>
 
         <main class="ml-64 p-8 w-full">
 
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center mb-8">
                 <div>
                     <p class="text-sm text-gray-500 mb-5">
                         Bienvenido/a,
@@ -126,9 +120,63 @@
                         <i class="fas fa-chart-bar mr-2 text-blue-500"></i>
                         Estadísticas Generales
                     </h1>
+                </div>
 
+                <div class="flex items-center gap-3">
+                    <!-- Botón de Ayuda (para todos los roles) -->
+                    <button onclick="showStatsHelp()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
+                        title="Ver información del módulo">
+                        <i class="fas fa-question-circle mr-2"></i>
+                        Ayuda
+                    </button>
                 </div>
             </div>
+
+            <!-- Modal de Ayuda para Estadísticas -->
+            <div id="statsHelpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+                <div class="flex items-center justify-center min-h-screen p-4">
+                    <div class="bg-white rounded-lg max-w-lg w-full p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                                Información del Módulo
+                            </h3>
+                            <button onclick="closeStatsHelp()" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="font-medium text-gray-700">Estadísticas Generales</h4>
+                            <p class="text-sm text-gray-600">
+                                Este módulo te proporciona una vista general del estado actual del sistema con estadísticas importantes.
+                            </p>
+
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-blue-800 mb-2">Información disponible:</h5>
+                                <ul class="text-sm text-blue-700 space-y-1">
+                                    <li><i class="fas fa-cubes mr-2"></i>Total de bienes registrados</li>
+                                    <li><i class="fas fa-dollar mr-2"></i> Presupuesto Total Gastado</li>
+                                    <li><i class="fas fa-chart-pie mr-2"></i> Clasificación por Tipo
+                                    </li>
+                                </ul>
+                            </div>
+
+                
+
+                        </div>
+
+                        <div class="mt-6 flex justify-end">
+                            <button onclick="closeStatsHelp()"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                                Entendido
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="stats-grid">
                 <div class="stat-card">
@@ -173,6 +221,22 @@
             </div>
         </main>
     </div>
+    <script>
+function showStatsHelp() {
+    document.getElementById('statsHelpModal').classList.remove('hidden');
+}
+
+function closeStatsHelp() {
+    document.getElementById('statsHelpModal').classList.add('hidden');
+}
+
+// Cerrar modal al hacer clic fuera de él
+document.getElementById('statsHelpModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeStatsHelp();
+    }
+});
+</script>
 </body>
 
 </html>
