@@ -61,6 +61,10 @@ router.post('/bitacora/generar-excel', authenticateToken, async(req,res)=>{
   controllerBienes.exportarBitacora(req,res);
 } );
 
+router.post('/bitacora/generar-pdf', authenticateToken, async(req,res)=>{
+  controllerBienes.exportarBitacoraPdf(req,res);
+});
+
 
 router.post('/usuarios/agregar', authenticateToken, authorizeAdmin, async (req, res) => {
   controllerBienes.agregarUsuario(req, res);

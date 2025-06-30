@@ -297,96 +297,100 @@
         <main class="ml-64 p-8 w-full">
             <!-- Header -->
             <div class="flex justify-between items-center mb-8">
-    <div>
-        <p class="text-sm text-gray-500 mb-5">
-            Bienvenido/a,
-            <span class="font-semibold text-blue-600">
-                <!-- <%= nombre %> -->
-                Administrador
-            </span>
-        </p>
-        <h1 class="text-2xl font-bold text-gray-800">
-            <i class="fas fa-users mr-2 text-blue-500"></i>
-            Gestión de Usuarios
-        </h1>
-    </div>
-    
-    <div class="flex items-center gap-3">
-        <!-- Botón de Ayuda -->
-        <button onclick="showUsersHelp()"
-            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
-            title="Ver información del módulo">
-            <i class="fas fa-question-circle mr-2"></i>
-            Ayuda
-        </button>
-        
-        <!-- Botón Agregar Usuario -->
-        <button onclick="openUsuarioModal()"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
-            <i class="fas fa-user-plus mr-2"></i>
-            Agregar Usuario
-        </button>
-    </div>
-</div>
-
-<!-- Modal de Ayuda para Gestión de Usuarios -->
-<div id="usersHelpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-    <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-lg max-w-lg w-full p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">
-                    <i class="fas fa-info-circle mr-2 text-blue-500"></i>
-                    Información del Módulo
-                </h3>
-                <button onclick="closeUsersHelp()" class="text-gray-400 hover:text-gray-600">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="space-y-3">
-                <h4 class="font-medium text-gray-700">Gestión de Usuarios</h4>
-                <p class="text-sm text-gray-600">
-                    Este módulo te permite administrar todos los usuarios del sistema y controlar sus permisos de acceso.
-                </p>
-                
-                <div class="bg-blue-50 p-3 rounded-lg">
-                    <h5 class="font-medium text-blue-800 mb-2">Funcionalidades disponibles:</h5>
-                    <ul class="text-sm text-blue-700 space-y-1">
-                        <li><i class="fas fa-user-plus mr-2"></i>Crear nuevos usuarios</li>
-                        <li><i class="fas fa-edit mr-2"></i>Editar información de usuarios</li>
-                        <li><i class="fas fa-user-times mr-2"></i>Eliminar usuarios</li>
-                        <li><i class="fas fa-key mr-2"></i>Asignar y modificar roles de usuario</li>
-                        <li><i class="fas fa-search mr-2"></i>Buscar y filtrar usuarios</li>
-                        <li><i class="fas fa-shield-alt mr-2"></i>Resetear contraseñas</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-green-50 p-3 rounded-lg">
-                    <h5 class="font-medium text-green-800 mb-2">Tipos de Roles:</h5>
-                    <ul class="text-sm text-green-700 space-y-1">
-                        <li><i class="fas fa-crown mr-2"></i><strong>Rol 1 (Administrador):</strong> Acceso completo a todos los módulos.</li>
-                        <li><i class="fas fa-user mr-2"></i><strong>Rol 2 (Usuario):</strong> Solo consulta de bienes y departamentos y exportar bitacoras.</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-red-50 p-3 rounded-lg">
-                    <p class="text-sm text-red-700">
-                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                        <strong>Módulo crítico:</strong> Solo administradores pueden acceder. Los cambios en usuarios afectan la seguridad del sistema.
+                <div>
+                    <p class="text-sm text-gray-500 mb-5">
+                        Bienvenido/a,
+                        <span class="font-semibold text-blue-600">
+                            <!-- <%= nombre %> -->
+                            Administrador
+                        </span>
                     </p>
+                    <h1 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-users mr-2 text-blue-500"></i>
+                        Gestión de Usuarios
+                    </h1>
                 </div>
-                
+
+                <div class="flex items-center gap-3">
+                    <!-- Botón de Ayuda -->
+                    <button onclick="showUsersHelp()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
+                        title="Ver información del módulo">
+                        <i class="fas fa-question-circle mr-2"></i>
+                        Ayuda
+                    </button>
+
+                    <!-- Botón Agregar Usuario -->
+                    <button onclick="openUsuarioModal()"
+                        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
+                        <i class="fas fa-user-plus mr-2"></i>
+                        Agregar Usuario
+                    </button>
+                </div>
             </div>
-            
-            <div class="mt-6 flex justify-end">
-                <button onclick="closeUsersHelp()" 
-                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
-                    Entendido
-                </button>
+
+            <!-- Modal de Ayuda para Gestión de Usuarios -->
+            <div id="usersHelpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+                <div class="flex items-center justify-center min-h-screen p-4">
+                    <div class="bg-white rounded-lg max-w-lg w-full p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                                Información del Módulo
+                            </h3>
+                            <button onclick="closeUsersHelp()" class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="font-medium text-gray-700">Gestión de Usuarios</h4>
+                            <p class="text-sm text-gray-600">
+                                Este módulo te permite administrar todos los usuarios del sistema y controlar sus
+                                permisos de acceso.
+                            </p>
+
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-blue-800 mb-2">Funcionalidades disponibles:</h5>
+                                <ul class="text-sm text-blue-700 space-y-1">
+                                    <li><i class="fas fa-user-plus mr-2"></i>Crear nuevos usuarios</li>
+                                    <li><i class="fas fa-edit mr-2"></i>Editar información de usuarios</li>
+                                    <li><i class="fas fa-user-times mr-2"></i>Eliminar usuarios</li>
+                                    <li><i class="fas fa-key mr-2"></i>Asignar y modificar roles de usuario</li>
+                                    <li><i class="fas fa-search mr-2"></i>Buscar y filtrar usuarios</li>
+                                    <li><i class="fas fa-shield-alt mr-2"></i>Resetear contraseñas</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-green-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-green-800 mb-2">Tipos de Roles:</h5>
+                                <ul class="text-sm text-green-700 space-y-1">
+                                    <li><i class="fas fa-crown mr-2"></i><strong>Rol 1 (Administrador):</strong> Acceso
+                                        completo a todos los módulos.</li>
+                                    <li><i class="fas fa-user mr-2"></i><strong>Rol 2 (Usuario):</strong> Solo consulta
+                                        de bienes y departamentos y exportar bitacoras.</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-red-50 p-3 rounded-lg">
+                                <p class="text-sm text-red-700">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                                    <strong>Módulo crítico:</strong> Solo administradores pueden acceder. Los cambios en
+                                    usuarios afectan la seguridad del sistema.
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-6 flex justify-end">
+                            <button onclick="closeUsersHelp()"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                                Entendido
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
 
             <div class="search-container mb-6">
                 <i class="fas fa-search search-icon"></i>
@@ -549,207 +553,207 @@
         </main>
     </div>
 
-   
-<script>
-    // Variables globales
-    let editingUserId = null;
-    const formUsuario = document.getElementById('formUsuario');
 
-    // Funciones del modal
-    function openUsuarioModal() {
-        document.getElementById('modalUsuario').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        
-        // Solo resetear cuando no estamos editando
-        if (!editingUserId) {
-            formUsuario.reset();
-            document.getElementById('password').required = true;
-            document.getElementById('password').placeholder = '••••••••';
-            document.getElementById('modalTitle').innerHTML = `
+    <script>
+        // Variables globales
+        let editingUserId = null;
+        const formUsuario = document.getElementById('formUsuario');
+
+        // Funciones del modal
+        function openUsuarioModal() {
+            document.getElementById('modalUsuario').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Solo resetear cuando no estamos editando
+            if (!editingUserId) {
+                formUsuario.reset();
+                document.getElementById('password').required = true;
+                document.getElementById('password').placeholder = '••••••••';
+                document.getElementById('modalTitle').innerHTML = `
                 <i class="fas fa-user-plus"></i>
                 Agregar Usuario
             `;
-        }
-    }
-
-    function closeUsuarioModal() {
-        document.getElementById('modalUsuario').style.display = 'none';
-        document.body.style.overflow = 'auto';
-        formUsuario.reset();
-        editingUserId = null;
-    }
-
-    // Cerrar modal al hacer clic fuera
-    document.getElementById('modalUsuario').addEventListener('click', function (e) {
-        if (e.target === this) closeUsuarioModal();
-    });
-
-    // Función de búsqueda
-    function searchUsers() {
-        const input = document.getElementById('searchInput');
-        const filter = input.value.toUpperCase();
-        const tableBody = document.getElementById('usersTableBody');
-        const rows = tableBody.getElementsByTagName('tr');
-        let hasResults = false;
-
-        // Eliminar mensaje anterior
-        const existingNoResults = tableBody.querySelectorAll('.no-results');
-        existingNoResults.forEach(noResult => noResult.parentNode.remove());
-
-        for (let i = 0; i < rows.length; i++) {
-            const cedula = rows[i].querySelector('.cedula')?.textContent.toUpperCase() || '';
-            const nombre = rows[i].querySelector('.nombre')?.textContent.toUpperCase() || '';
-            const email = rows[i].querySelector('.email')?.textContent.toUpperCase() || '';
-
-            const match = cedula.includes(filter) || nombre.includes(filter) || email.includes(filter);
-
-            rows[i].style.display = match ? '' : 'none';
-            if (match) hasResults = true;
+            }
         }
 
-        if (!hasResults) {
-            const noResultsRow = document.createElement('tr');
-            noResultsRow.innerHTML = `
+        function closeUsuarioModal() {
+            document.getElementById('modalUsuario').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            formUsuario.reset();
+            editingUserId = null;
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('modalUsuario').addEventListener('click', function (e) {
+            if (e.target === this) closeUsuarioModal();
+        });
+
+        // Función de búsqueda
+        function searchUsers() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const tableBody = document.getElementById('usersTableBody');
+            const rows = tableBody.getElementsByTagName('tr');
+            let hasResults = false;
+
+            // Eliminar mensaje anterior
+            const existingNoResults = tableBody.querySelectorAll('.no-results');
+            existingNoResults.forEach(noResult => noResult.parentNode.remove());
+
+            for (let i = 0; i < rows.length; i++) {
+                const cedula = rows[i].querySelector('.cedula')?.textContent.toUpperCase() || '';
+                const nombre = rows[i].querySelector('.nombre')?.textContent.toUpperCase() || '';
+                const email = rows[i].querySelector('.email')?.textContent.toUpperCase() || '';
+
+                const match = cedula.includes(filter) || nombre.includes(filter) || email.includes(filter);
+
+                rows[i].style.display = match ? '' : 'none';
+                if (match) hasResults = true;
+            }
+
+            if (!hasResults) {
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.innerHTML = `
                 <td colspan="5" class="no-results">
                     <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
                     <p>No se encontraron usuarios que coincidan con la búsqueda</p>
                 </td>
             `;
-            tableBody.appendChild(noResultsRow);
+                tableBody.appendChild(noResultsRow);
+            }
         }
-    }
 
-    function editUser(id) {
-        editingUserId = id;
-        const row = document.querySelector(`tr[data-id="${id}"]`);
+        function editUser(id) {
+            editingUserId = id;
+            const row = document.querySelector(`tr[data-id="${id}"]`);
 
-        if (row) {
-            // Primero obtener los datos
-            const cedula = row.querySelector('.cedula').textContent.trim();
-            const nombre = row.querySelector('.nombre').textContent.trim();
-            const email = row.querySelector('.email').textContent.trim();
-            const rolText = row.querySelector('.rol span').textContent.trim();
-            const rolValue = rolText === 'Administrador' ? '1' : '2';
+            if (row) {
+                // Primero obtener los datos
+                const cedula = row.querySelector('.cedula').textContent.trim();
+                const nombre = row.querySelector('.nombre').textContent.trim();
+                const email = row.querySelector('.email').textContent.trim();
+                const rolText = row.querySelector('.rol span').textContent.trim();
+                const rolValue = rolText === 'Administrador' ? '1' : '2';
 
-            // Asignar los valores a los campos
-            document.getElementById('cedula').value = cedula;
-            document.getElementById('nombre').value = nombre;
-            document.getElementById('email').value = email;
-            document.getElementById('rol').value = rolValue;
-            document.getElementById('password').required = false;
-            document.getElementById('password').placeholder = 'Dejar en blanco para no cambiar';
+                // Asignar los valores a los campos
+                document.getElementById('cedula').value = cedula;
+                document.getElementById('nombre').value = nombre;
+                document.getElementById('email').value = email;
+                document.getElementById('rol').value = rolValue;
+                document.getElementById('password').required = false;
+                document.getElementById('password').placeholder = 'Dejar en blanco para no cambiar';
 
-            // Cambiar título
-            document.getElementById('modalTitle').innerHTML = `
+                // Cambiar título
+                document.getElementById('modalTitle').innerHTML = `
                 <i class="fas fa-user-edit"></i>
                 Editar Usuario
             `;
 
-            // Ahora abrir el modal (que no reseteará porque editingUserId está establecido)
-            openUsuarioModal();
+                // Ahora abrir el modal (que no reseteará porque editingUserId está establecido)
+                openUsuarioModal();
+            }
         }
-    }
 
-    function deleteUser(id) {
-        if (confirm('¿Está seguro de que desea eliminar este usuario?')) {
-            fetch(`/usuarios/eliminar/${id}`, {
-                method: 'POST'
-            })
-            .then(response => {
+        function deleteUser(id) {
+            if (confirm('¿Está seguro de que desea eliminar este usuario?')) {
+                fetch(`/usuarios/eliminar/${id}`, {
+                    method: 'POST'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            const row = document.querySelector(`tr[data-id="${id}"]`);
+                            if (row) {
+                                row.remove();
+                            }
+                            showNotification('Usuario eliminado correctamente', 'success');
+                        } else {
+                            showNotification('Error al eliminar el usuario', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Error de conexión', 'error');
+                    });
+            }
+        }
+
+        // Manejador de envío del formulario
+        formUsuario.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const action = editingUserId
+                ? `/usuarios/editar/${editingUserId}`
+                : '/usuarios/agregar';
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
                 if (response.ok) {
-                    const row = document.querySelector(`tr[data-id="${id}"]`);
-                    if (row) {
-                        row.remove();
-                    }
-                    showNotification('Usuario eliminado correctamente', 'success');
+                    showNotification(
+                        editingUserId
+                            ? 'Usuario actualizado correctamente'
+                            : 'Usuario creado correctamente',
+                        'success'
+                    );
+                    setTimeout(() => location.reload(), 1500);
                 } else {
-                    showNotification('Error al eliminar el usuario', 'error');
+                    const errorText = await response.text();
+                    showNotification(`Error: ${errorText}`, 'error');
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error:', error);
                 showNotification('Error de conexión', 'error');
-            });
-        }
-    }
-
-    // Manejador de envío del formulario
-    formUsuario.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const action = editingUserId 
-            ? `/usuarios/editar/${editingUserId}`
-            : '/usuarios/agregar';
-        
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-        
-        try {
-            const response = await fetch(action, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (response.ok) {
-                showNotification(
-                    editingUserId 
-                        ? 'Usuario actualizado correctamente' 
-                        : 'Usuario creado correctamente',
-                    'success'
-                );
-                setTimeout(() => location.reload(), 1500);
-            } else {
-                const errorText = await response.text();
-                showNotification(`Error: ${errorText}`, 'error');
             }
-        } catch (error) {
-            console.error('Error:', error);
-            showNotification('Error de conexión', 'error');
-        }
-    });
+        });
 
-    // Permitir búsqueda al presionar Enter
-    document.getElementById('searchInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            searchUsers();
-        }
-    });
+        // Permitir búsqueda al presionar Enter
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                searchUsers();
+            }
+        });
 
-    // Función para mostrar notificaciones
-    function showNotification(message, type) {
-        // Eliminar notificaciones anteriores
-        const existingNotifications = document.querySelectorAll('.notification');
-        existingNotifications.forEach(notification => notification.remove());
-        
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `
+        // Función para mostrar notificaciones
+        function showNotification(message, type) {
+            // Eliminar notificaciones anteriores
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
             <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
             ${message}
         `;
-        
-        document.body.appendChild(notification);
-        
-        // Animación para mostrar
-        setTimeout(() => {
-            notification.style.opacity = '1';
-            notification.style.transform = 'translateY(0)';
-        }, 10);
-        
-        // Ocultar después de 3 segundos
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateY(-20px)';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    }
 
-    // Estilos para notificaciones
-    const style = document.createElement('style');
-    style.textContent = `
+            document.body.appendChild(notification);
+
+            // Animación para mostrar
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Estilos para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
         .notification {
             position: fixed;
             top: 20px;
@@ -780,24 +784,24 @@
             font-size: 1.2rem;
         }
     `;
-    document.head.appendChild(style);
-</script>
-<script>
-function showUsersHelp() {
-    document.getElementById('usersHelpModal').classList.remove('hidden');
-}
+        document.head.appendChild(style);
+    </script>
+    <script>
+        function showUsersHelp() {
+            document.getElementById('usersHelpModal').classList.remove('hidden');
+        }
 
-function closeUsersHelp() {
-    document.getElementById('usersHelpModal').classList.add('hidden');
-}
+        function closeUsersHelp() {
+            document.getElementById('usersHelpModal').classList.add('hidden');
+        }
 
-// Cerrar modal al hacer clic fuera de él
-document.getElementById('usersHelpModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeUsersHelp();
-    }
-});
-</script>
+        // Cerrar modal al hacer clic fuera de él
+        document.getElementById('usersHelpModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeUsersHelp();
+            }
+        });
+    </script>
 </body>
 
 </html>

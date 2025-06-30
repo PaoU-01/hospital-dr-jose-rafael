@@ -108,6 +108,21 @@
                 Generar Reporte Excel
             </button>
         </form>
+        <form action="/bitacora/generar-pdf" method="POST">
+            <div class="mb-4">
+                <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
+                <select name="departamento_id" class="w-full p-2 border rounded" required>
+                    <% departamentos.forEach(dpto => { %>
+                        <option value="<%= dpto.id %>"><%= dpto.nombre %></option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                <i class="fas fa-file-pdf mr-2"></i>
+                Generar Reporte PDF
+            </button>
+        </form>
     </div>
 </main>
 
