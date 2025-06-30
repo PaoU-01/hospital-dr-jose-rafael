@@ -83,7 +83,9 @@ router.post('/bitacora/generar-pdf-2017', authenticateToken, async(req,res)=>{
 } );
 
 
-
+router.post('/bitacora/orden-transferencia', authenticateToken, async(req,res)=>{
+  controllerBienes.ordenTransferencia(req,res);
+});
 
 
 router.post('/usuarios/agregar', authenticateToken, authorizeAdmin, async (req, res) => {

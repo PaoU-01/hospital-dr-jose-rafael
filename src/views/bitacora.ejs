@@ -78,9 +78,74 @@
             </nav>
         </aside>
 
+        <!-- Modal de Ayuda para Reporte BM-1 -->
+        <div id="reportHelpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg max-w-lg w-full p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                            Información del Reporte
+                        </h3>
+                        <button onclick="closeReportHelp()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h4 class="font-medium text-gray-700">Reporte BM (Bitácora de Materiales)</h4>
+                        <p class="text-sm text-gray-600">
+                            Este reporte genera un archivo Excel con el inventario completo de bienes de un departamento
+                            específico.
+                        </p>
+
+                        <div class="bg-green-50 p-3 rounded-lg">
+                            <h5 class="font-medium text-green-800 mb-2">Contenido del reporte:</h5>
+                            <ul class="text-sm text-green-700 space-y-1">
+                                <li><i class="fas fa-check mr-2"></i>Código de inventario de cada bien</li>
+                                <li><i class="fas fa-check mr-2"></i>Descripción detallada del bien</li>
+                                <li><i class="fas fa-check mr-2"></i>Estado actual del bien</li>
+                                <li><i class="fas fa-check mr-2"></i>Fecha de registro</li>
+                                <li><i class="fas fa-check mr-2"></i>Departamento asignado</li>
+                                <li><i class="fas fa-check mr-2"></i>Información adicional relevante</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <h5 class="font-medium text-blue-800 mb-2">Características del archivo:</h5>
+                            <ul class="text-sm text-blue-700 space-y-1">
+                                <li><i class="fas fa-file-excel mr-2"></i>Formato: Microsoft Excel (.xlsx) y PDF (.pdf)</li>
+                                <li><i class="fas fa-table mr-2"></i>Datos organizados en tabla</li>
+                                <li><i class="fas fa-download mr-2"></i>Descarga automática al generar</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-yellow-50 p-3 rounded-lg">
+                            <h5 class="font-medium text-yellow-800 mb-1">Instrucciones:</h5>
+                            <ol class="text-sm text-yellow-700 space-y-1">
+                                <li>1. Selecciona el departamento del cual deseas el reporte</li>
+                                <li>2. Haz clic en "Generar Reporte Excel"</li>
+                                <li>3. El archivo se descargará automáticamente</li>
+                                <li>4. Abre el archivo con Microsoft Excel o similar</li>
+                            </ol>
+                        </div>
+
+
+                    </div>
+
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="closeReportHelp()"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                            Entendido
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <main class="ml-64 p-8 w-full">
             <h1 class="text-3xl font-semibold text-gray-800 mb-4 flex items-center">
-            <i class="fas fa-file mr-2 text-green-600"></i> Reportes
+                <i class="fas fa-file mr-2 text-green-600"></i> Reportes
             </h1>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- === Reporte BM-1 === -->
@@ -122,7 +187,7 @@
                     </div>
 
                     <!-- Ayuda -->
-                    <button onclick="showReportHelp()"
+                    <button onclick="showReportHelp(1)"
                         class="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center justify-center">
                         <i class="fas fa-question-circle mr-2"></i> Ayuda
                     </button>
@@ -215,77 +280,96 @@
                         <i class="fas fa-question-circle mr-2"></i> Ayuda
                     </button>
                 </div>
+
+
+                <!-- === Reporte Orden de Transferencia === -->
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-file-pdf mr-2 text-red-600"></i> Generar Orden de Transferencia
+                        </h2>
+
+                        <form id="transfer-form" action="/bitacora/orden-transferencia" method="POST" class="space-y-4">
+                            <!-- Contenedor de filas -->
+                            <div id="filas-container" class="space-y-2">
+                                <!-- plantilla de fila -->
+                                <template id="fila-template">
+                                    <div class="grid grid-cols-13 gap-2 items-end relative border p-2 rounded fila">
+                                        <!-- Campos de la fila -->
+                                        <div class="col-span-5">
+                                            <label class="block text-gray-700 text-sm">Número del Bien</label>
+                                            <input type="text" name="bienNum" class="w-full p-2 border rounded"
+                                                required>
+                                        </div>
+                                        <div class="col-span-5">
+                                            <label class="block text-gray-700 text-sm">Descripción</label>
+                                            <input type="text" name="descripcion" class="w-full p-2 border rounded"
+                                                required>
+                                        </div>
+                                        <div class="col-span-5">
+                                            <label class="block text-gray-700 text-sm">Servicio procedente</label>
+                                            <input type="text" name="servicio" class="w-full p-2 border rounded"
+                                                required>
+                                        </div>
+                                        <div class="col-span-5">
+                                            <label class="block text-gray-700 text-sm">Destino</label>
+                                            <input type="text" name="destino" class="w-full p-2 border rounded"
+                                                required>
+                                        </div>
+
+                                        <button type="button"
+                                            class="mt-1 mr-1 bg-red-500 w-full p-4 text-white px-2 py-1 text-sm rounded hover:bg-red-600 eliminar-fila">
+                                            Eliminar
+                                        </button>
+                                    </div>
+                                </template>
+
+
+                            </div>
+
+                            <!-- Botón para agregar filas -->
+                            <button type="button" id="add-fila"
+                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                Agregar bien
+                            </button>
+
+                            <!-- Radio único -->
+                            <div>
+                                <span class="block text-gray-700 mb-1 text-sm">Tipo de transferencia:</span>
+                                <div class="flex flex-wrap gap-4">
+                                    <label><input type="radio" name="tipo" value="INTERNA" required> INTERNA</label>
+                                    <label><input type="radio" name="tipo" value="EXTERNA"> EXTERNA</label>
+                                    <label><input type="radio" name="tipo" value="PERMANENTE"> PERMANENTE</label>
+                                    <label><input type="radio" name="tipo" value="PRÉSTAMO"> PRÉSTAMO</label>
+                                    <label><input type="radio" name="tipo" value="REPARACIÓN"> REPARACIÓN</label>
+                                </div>
+                            </div>
+
+                            <!-- Observaciones -->
+                            <div>
+                                <label class="block text-gray-700 text-sm mb-1">Observaciones</label>
+                                <textarea name="observaciones" rows="4" class="w-full p-2 border rounded"
+                                    placeholder="Escribe aquí alguna nota o comentario adicional..."
+                                    required></textarea>
+                            </div>
+
+                            <!-- Botón de submit -->
+                            <button type="submit" class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600">
+                                <i class="fas fa-file-pdf mr-2"></i> Generar PDF
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+
             </div>
         </main>
 
 
-        <!-- Modal de Ayuda para Reporte BM-1 -->
-        <div id="reportHelpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-            <div class="flex items-center justify-center min-h-screen p-4">
-                <div class="bg-white rounded-lg max-w-lg w-full p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">
-                            <i class="fas fa-info-circle mr-2 text-blue-500"></i>
-                            Información del Reporte
-                        </h3>
-                        <button onclick="closeReportHelp()" class="text-gray-400 hover:text-gray-600">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
 
-                    <div class="space-y-3">
-                        <h4 class="font-medium text-gray-700">Reporte BM-1 (Bitácora de Materiales)</h4>
-                        <p class="text-sm text-gray-600">
-                            Este reporte genera un archivo Excel con el inventario completo de bienes de un departamento
-                            específico.
-                        </p>
-
-                        <div class="bg-green-50 p-3 rounded-lg">
-                            <h5 class="font-medium text-green-800 mb-2">Contenido del reporte:</h5>
-                            <ul class="text-sm text-green-700 space-y-1">
-                                <li><i class="fas fa-check mr-2"></i>Código de inventario de cada bien</li>
-                                <li><i class="fas fa-check mr-2"></i>Descripción detallada del bien</li>
-                                <li><i class="fas fa-check mr-2"></i>Estado actual del bien</li>
-                                <li><i class="fas fa-check mr-2"></i>Fecha de registro</li>
-                                <li><i class="fas fa-check mr-2"></i>Departamento asignado</li>
-                                <li><i class="fas fa-check mr-2"></i>Información adicional relevante</li>
-                            </ul>
-                        </div>
-
-                        <div class="bg-blue-50 p-3 rounded-lg">
-                            <h5 class="font-medium text-blue-800 mb-2">Características del archivo:</h5>
-                            <ul class="text-sm text-blue-700 space-y-1">
-                                <li><i class="fas fa-file-excel mr-2"></i>Formato: Microsoft Excel (.xlsx)</li>
-                                <li><i class="fas fa-table mr-2"></i>Datos organizados en tabla</li>
-                                <li><i class="fas fa-download mr-2"></i>Descarga automática al generar</li>
-                            </ul>
-                        </div>
-
-                        <div class="bg-yellow-50 p-3 rounded-lg">
-                            <h5 class="font-medium text-yellow-800 mb-1">Instrucciones:</h5>
-                            <ol class="text-sm text-yellow-700 space-y-1">
-                                <li>1. Selecciona el departamento del cual deseas el reporte</li>
-                                <li>2. Haz clic en "Generar Reporte Excel"</li>
-                                <li>3. El archivo se descargará automáticamente</li>
-                                <li>4. Abre el archivo con Microsoft Excel o similar</li>
-                            </ol>
-                        </div>
-
-
-                    </div>
-
-                    <div class="mt-6 flex justify-end">
-                        <button onclick="closeReportHelp()"
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
-                            Entendido
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <script>
-            function showReportHelp() {
+            function showReportHelp(id) {
                 document.getElementById('reportHelpModal').classList.remove('hidden');
             }
 
@@ -300,6 +384,60 @@
                 }
             });
         </script>
+
+
+        <script>
+
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const addFilaBtn = document.getElementById('add-fila');
+                const filasContainer = document.getElementById('filas-container');
+                const filaTemplate = document.getElementById('fila-template');
+
+                function crearFila() {
+                    // Clonar el template y extraer el elemento .fila
+                    const fragment = filaTemplate.content.cloneNode(true);
+                    const nuevaFila = fragment.querySelector('.fila');
+
+                    // Agregar listener al botón de eliminar
+                    nuevaFila.querySelector('.eliminar-fila')
+                        .addEventListener('click', () => nuevaFila.remove());
+
+                    return nuevaFila;
+                }
+
+                // Añadir la primera fila al cargar
+                filasContainer.appendChild(crearFila());
+
+                // Al hacer clic en “Agregar bien”
+                addFilaBtn.addEventListener('click', () => {
+                    filasContainer.appendChild(crearFila());
+                });
+
+                // Envío del formulario (igual que antes)
+                const transferForm = document.getElementById('transfer-form');
+                transferForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(transferForm);
+                    const data = {};
+                    formData.forEach((value, key) => {
+                        if (!data[key]) data[key] = [];
+                        data[key].push(value);
+                    });
+                    fetch('/bitacora/orden-transferencia', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    })
+                        .then(r => r.ok ? console.log('Enviado') : console.error('Error'))
+                        .catch(err => console.error('Red:', err));
+                    this.submit();
+                });
+            });
+
+
+        </script>
+
     </div>
 </body>
 

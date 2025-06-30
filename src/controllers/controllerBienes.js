@@ -5,6 +5,7 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const convertapi = require('convertapi')('ORZ5LZtqQ8Rg1vfZ3N5dFqjfrdcKgqDA');
 const os = require('os'); // Para manejar rutas de archivos temporales
+const PDFDocument = require('pdfkit'); // Para generar PDFs
 
 class ControllerBienes {
     constructor() {
@@ -543,7 +544,7 @@ class ControllerBienes {
         }
     }
 
-    
+
     async exportarBitacora2017PDF(req, res) {
         try {
             const { departamento_id } = req.body;
@@ -593,6 +594,306 @@ class ControllerBienes {
             res.status(500).send('Error al generar la bitácora');
         }
     }
+
+    // Método para generar el PDF
+    generarPDFTransferencia(datos) {
+        return new Promise((resolve, reject) => {
+            try {
+                const doc = new PDFDocument({ size: 'A4', margin: 50 });
+                const buffers = [];
+
+                // Capturar el PDF en memoria
+                doc.on('data', buffers.push.bind(buffers));
+                doc.on('end', () => {
+                    const pdfData = Buffer.concat(buffers);
+                    resolve(pdfData);
+                });
+
+                // Manejo de errores del documento
+                doc.on('error', (error) => {
+                    console.error('Error en PDFDocument:', error);
+                    reject(error);
+                });
+
+                // Logo en la esquina superior izquierda
+                try {
+                    const logoPath = path.join(__dirname, '../public/images/Imagen1.png');
+                    if (fs.existsSync(logoPath)) {
+                        doc.image(logoPath, 50, 20, { width: 100, height: 80 });
+                    }
+                } catch (error) {
+                    console.log('Logo no encontrado, continuando sin logo...');
+                }
+
+                doc.fontSize(8)
+                    .text('REPÚBLICA BOLIVARIANA DE VENEZUELA', 50, 50, { width: 500, align: 'center' })
+                    .text('GOBIERNO BOLIVARIANO DE ARAGUA', 50, 62, { width: 500, align: 'center' })
+                    .text('GOBERNACIÓN DEL ESTADO ARAGUA', 50, 74, { width: 500, align: 'center' })
+                    .text('COORDINACIÓN DE BIENES NACIONALES', 50, 86, { width: 500, align: 'center' });
+
+                // Título principal (centrado)
+                doc.fontSize(14)
+                    .font('Helvetica-Bold')
+                    .text('ORDEN DE TRANSFERENCIA', 50, 120, { width: 500, align: 'center' });
+
+                // Fecha
+                doc.fontSize(10)
+                    .font('Helvetica')
+                    .text('FECHA:', 50, 160)
+                    .text(datos.fecha, 95, 160);
+
+                // Determinar qué checkboxes marcar según el tipo seleccionado
+                const tipoSeleccionado = datos.tipo;
+                const yCheckbox = 180;
+
+                // Resetear fuente antes de los checkboxes
+                doc.fontSize(10).font('Helvetica');
+
+                // Checkboxes - Tipo de operación
+                doc.rect(50, yCheckbox, 10, 10).stroke()
+                    .text('INTERNA', 70, yCheckbox + 2);
+                if (tipoSeleccionado === 'INTERNA') {
+                    doc.fontSize(8).text('X', 53, yCheckbox + 2);
+                    doc.fontSize(10); // Restaurar tamaño
+                }
+
+                doc.rect(50, yCheckbox + 20, 10, 10).stroke()
+                    .text('EXTERNA', 70, yCheckbox + 22);
+                if (tipoSeleccionado === 'EXTERNA') {
+                    doc.fontSize(8).text('X', 53, yCheckbox + 22);
+                    doc.fontSize(10); // Restaurar tamaño
+                }
+
+                doc.rect(50, yCheckbox + 40, 10, 10).stroke()
+                    .text('PERMANENTE', 70, yCheckbox + 42);
+                if (tipoSeleccionado === 'PERMANENTE') {
+                    doc.fontSize(8).text('X', 53, yCheckbox + 42);
+                    doc.fontSize(10); // Restaurar tamaño
+                }
+
+                // Checkboxes - Préstamo/Reparación
+                doc.rect(300, yCheckbox, 10, 10).stroke()
+                    .text('PRÉSTAMO', 320, yCheckbox + 2);
+                if (tipoSeleccionado === 'PRÉSTAMO') {
+                    doc.fontSize(8).text('X', 303, yCheckbox + 2);
+                    doc.fontSize(10); // Restaurar tamaño
+                }
+
+                doc.rect(300, yCheckbox + 20, 10, 10).stroke()
+                    .text('REPARACIÓN', 320, yCheckbox + 22);
+                if (tipoSeleccionado === 'REPARACIÓN') {
+                    doc.fontSize(8).text('X', 303, yCheckbox + 22);
+                    doc.fontSize(10); // Restaurar tamaño
+                }
+
+                // Texto legal
+                const textoLegal = 'DE CONFORMIDAD CON LOS ART. 264 Y 265 DE LA LEY ORGÁNICA DE LA HACIENDA PÚBLICA NACIONAL Y POR REQUERIRLO ASÍ LA NECESIDAD DE LA DEPENDENCIA HOSPITAL DR. JOSÉ RANGEL, SE AUTORIZA LA TRANSFERENCIA DE LOS SIGUIENTES BIENES:';
+
+                doc.fontSize(9)
+                    .font('Helvetica')
+                    .text(textoLegal, 50, 260, { width: 500, align: 'justify' });
+
+                // Validar que hay datos en la tabla
+                if (!datos.datosTabla || datos.datosTabla.length === 0) {
+                    throw new Error('No hay datos de tabla para procesar');
+                }
+
+                // Tabla
+                const tableTop = 320;
+                const tableLeft = 50;
+                const colWidths = [80, 200, 120, 100];
+                const rowHeight = 25;
+
+                // Headers de la tabla
+                const headers = ['Número del Bien', 'Descripción', 'Servicio procedente', 'Destino'];
+
+                // Dibujar headers
+                let currentX = tableLeft;
+                headers.forEach((header, i) => {
+                    doc.rect(currentX, tableTop, colWidths[i], rowHeight).stroke();
+                    doc.fontSize(8)
+                        .font('Helvetica-Bold')
+                        .text(header, currentX + 5, tableTop + 8, { width: colWidths[i] - 10 });
+                    currentX += colWidths[i];
+                });
+
+                // Dibujar filas con datos del formulario
+                datos.datosTabla.forEach((row, rowIndex) => {
+                    const yPos = tableTop + rowHeight * (rowIndex + 1);
+                    currentX = tableLeft;
+
+                    row.forEach((cell, colIndex) => {
+                        doc.rect(currentX, yPos, colWidths[colIndex], rowHeight).stroke();
+                        doc.fontSize(7)
+                            .font('Helvetica')
+                            .text(String(cell || ''), currentX + 3, yPos + 5, {
+                                width: colWidths[colIndex] - 6,
+                                lineGap: 2
+                            });
+                        currentX += colWidths[colIndex];
+                    });
+                });
+
+                // Observación
+                const obsY = tableTop + rowHeight * (datos.datosTabla.length + 2);
+                doc.fontSize(9)
+                    .font('Helvetica-Bold')
+                    .text('Observación', 50, obsY);
+
+
+                // Texto de observación del formulario
+                doc.fontSize(8)
+                    .font('Helvetica')
+                    .text(String(datos.observaciones || 'Sin observaciones adicionales'), 50, obsY + 20, {
+                        width: 500,
+                        align: 'justify'
+                    });
+
+                // Firmas - Centradas en la página
+                const signaturesY = obsY + 100;
+                const pageWidth = 595;
+                const signatureWidth = 120;
+
+                // Primera fila de firmas
+                const leftSignX = (pageWidth / 4) - (signatureWidth / 2);
+                const rightSignX = (3 * pageWidth / 4) - (signatureWidth / 2);
+
+                doc.moveTo(leftSignX, signaturesY).lineTo(leftSignX + signatureWidth, signaturesY).stroke();
+                doc.text('Director', leftSignX, signaturesY + 10, { width: signatureWidth, align: 'center' });
+
+                doc.moveTo(rightSignX, signaturesY).lineTo(rightSignX + signatureWidth, signaturesY).stroke();
+                doc.text('Coord. de Administración', rightSignX, signaturesY + 10, { width: signatureWidth, align: 'center' });
+
+                // Segunda fila de firmas
+                const signatures2Y = signaturesY + 60;
+                doc.moveTo(leftSignX, signatures2Y).lineTo(leftSignX + signatureWidth, signatures2Y).stroke();
+                doc.text('Coord. Bienes Nacionales', leftSignX, signatures2Y + 10, { width: signatureWidth, align: 'center' });
+
+                doc.moveTo(rightSignX, signatures2Y).lineTo(rightSignX + signatureWidth, signatures2Y).stroke();
+                doc.text('Servicio de procedencia', rightSignX, signatures2Y + 10, { width: signatureWidth, align: 'center' });
+
+                // Tercera fila - Receptor (centrado en toda la página)
+                const signatures3Y = signatures2Y + 60;
+                const centerSignX = (pageWidth / 2) - (signatureWidth / 2);
+                doc.moveTo(centerSignX, signatures3Y).lineTo(centerSignX + signatureWidth, signatures3Y).stroke();
+                doc.text('Receptor', centerSignX, signatures3Y + 10, { width: signatureWidth, align: 'center' });
+
+                // Finalizar el documento
+                doc.end();
+
+            } catch (error) {
+                console.error('Error en generarPDFTransferencia:', error);
+                reject(error);
+            }
+        });
+    }
+
+    async ordenTransferencia(req, res) {
+        try {
+            console.log('Datos recibidos RAW:', req.body);
+
+            function normalizeToArray(value) {
+                if (Array.isArray(value)) {
+                    return value;
+                } else if (value !== undefined && value !== null && value !== '') {
+                    return [value];
+                } else {
+                    return [];
+                }
+            }
+
+            const bienNum = normalizeToArray(req.body.bienNum);
+            const descripcion = normalizeToArray(req.body.descripcion);
+            const servicio = normalizeToArray(req.body.servicio);
+            const destino = normalizeToArray(req.body.destino);
+            const tipo = req.body.tipo;
+            const observaciones = req.body.observaciones;
+
+            console.log('Arrays normalizados:');
+            console.log('bienNum:', bienNum);
+            console.log('descripcion:', descripcion);
+            console.log('servicio:', servicio);
+            console.log('destino:', destino);
+            console.log('tipo:', tipo);
+            console.log('observaciones:', observaciones);
+
+            // Validaciones mejoradas
+            if (bienNum.length === 0) {
+                return res.status(400).json({
+                    error: 'Debe incluir al menos un bien para transferir'
+                });
+            }
+
+            if (!tipo) {
+                return res.status(400).json({
+                    error: 'Debe seleccionar un tipo de transferencia'
+                });
+            }
+
+            if (!observaciones || observaciones.trim() === '') {
+                return res.status(400).json({
+                    error: 'Debe incluir observaciones'
+                });
+            }
+
+            // Construir tabla de datos
+            const datosTabla = [];
+            const maxLength = Math.max(bienNum.length, descripcion.length, servicio.length, destino.length);
+
+            for (let i = 0; i < maxLength; i++) {
+                const bien = bienNum[i] || '';
+                const desc = descripcion[i] || '';
+                const serv = servicio[i] || '';
+                const dest = destino[i] || '';
+
+                // Solo agregar filas que tengan todos los campos completos
+                if (bien.trim() && desc.trim() && serv.trim() && dest.trim()) {
+                    datosTabla.push([
+                        String(bien).trim(),
+                        String(desc).trim(),
+                        String(serv).trim(),
+                        String(dest).trim()
+                    ]);
+                }
+            }
+
+            console.log('Datos de tabla final:', datosTabla);
+
+            if (datosTabla.length === 0) {
+                return res.status(400).json({
+                    error: 'Debe completar al menos una fila con todos los campos'
+                });
+            }
+
+            const pdfBuffer = await this.generarPDFTransferencia({
+                datosTabla,
+                tipo: String(tipo).trim(),
+                observaciones: String(observaciones).trim(),
+                fecha: new Date().toLocaleDateString('es-VE')
+            });
+
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'attachment; filename="orden_transferencia.pdf"');
+            res.setHeader('Content-Length', pdfBuffer.length);
+
+            // Enviar el PDF
+            res.send(pdfBuffer);
+
+        } catch (error) {
+            console.error('Error completo en ordenTransferencia:', error);
+            console.error('Stack trace:', error.stack);
+
+            // Respuesta de error más detallada para debug
+            res.status(500).json({
+                error: 'Error interno del servidor al generar el PDF',
+                details: process.env.NODE_ENV === 'development' ? error.message : undefined
+            });
+        }
+    }
+
+
+
+
 
 
 }
