@@ -66,6 +66,26 @@ router.post('/bitacora/generar-pdf', authenticateToken, async(req,res)=>{
 });
 
 
+router.post('/bitacora/generar-excel-2021', authenticateToken, async(req,res)=>{
+  controllerBienes.exportarBitacora2021(req,res);
+} );
+
+router.post('/bitacora/generar-pdf-2021', authenticateToken, async(req,res)=>{
+  controllerBienes.exportarBitacora2021PDF(req,res);
+} );
+
+router.post('/bitacora/generar-excel-2017', authenticateToken, async(req,res)=>{
+  controllerBienes.exportarBitacora2017(req,res);
+} );
+
+router.post('/bitacora/generar-pdf-2017', authenticateToken, async(req,res)=>{
+  controllerBienes.exportarBitacora2017PDF(req,res);
+} );
+
+
+
+
+
 router.post('/usuarios/agregar', authenticateToken, authorizeAdmin, async (req, res) => {
   controllerBienes.agregarUsuario(req, res);
 }

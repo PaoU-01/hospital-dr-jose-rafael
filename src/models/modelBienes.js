@@ -240,9 +240,7 @@ class ModelBienes {
         return new Promise((resolve, reject) => {
             this.db.all(
                 `SELECT 
-           nombre, marca, modelo, grupo, subgrupo, numero_serie,
-           incorporaciones, observaciones, seccion, estado,
-           cantidad, numero_identificacion, costo
+           *
          FROM bienes
          WHERE departamento_id = ?`,
                 [deptoId],

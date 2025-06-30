@@ -348,71 +348,252 @@ class ControllerBienes {
             res.status(500).send('Error al generar la bitácora');
         }
     }
+    async exportarBitacoraPdf(req, res) {
+        try {
+            const { departamento_id } = req.body;
+            const departamento = await this.modelBienes.getDepartamentoById(departamento_id);
+            const bienes = await this.modelBienes.getBienesPorDepartamento(departamento_id);
 
-    async  exportarBitacoraPdf(req, res) {
-    try {
-        const { departamento_id } = req.body;
-        const departamento = await this.modelBienes.getDepartamentoById(departamento_id);
-        const bienes = await this.modelBienes.getBienesPorDepartamento(departamento_id);
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Exportó la bitácora del departamento ${departamento.nombre}`,
+                tabla_afectada: 'Ninguna'
+            });
 
-        await this.modelBienes.registrar({
-            usuario_cedula: req.user.cedula,
-            usuario_nombre: req.user.nombre,
-            usuario_rol: req.user.rol,
-            accion: `Exportó la bitácora del departamento ${departamento.nombre}`,
-            tabla_afectada: 'Ninguna'
-        });
+            // 1. Crear Excel en archivo temporal
+            const workbook = new Excel.Workbook();
+            await workbook.xlsx.readFile(path.resolve(__dirname, 'BM1_2022-hospital.xlsx'));
+            const ws = workbook.getWorksheet('Hoja1');
+            ws.getCell('I8').value = departamento.nombre;
+            ws.getCell('F8').value = departamento.nombre;
 
-        // 1. Crear Excel en archivo temporal
-        const workbook = new Excel.Workbook();
-        await workbook.xlsx.readFile(path.resolve(__dirname, 'BM1_2022-hospital.xlsx'));
-        const ws = workbook.getWorksheet('Hoja1');
-        ws.getCell('I8').value = departamento.nombre;
-        ws.getCell('F8').value = departamento.nombre;
+            let fila = 15;
+            for (const b of bienes) {
+                ws.getCell(`A${fila}`).value = b.grupo;
+                ws.getCell(`B${fila}`).value = b.subgrupo;
+                ws.getCell(`C${fila}`).value = b.seccion;
+                ws.getCell(`D${fila}`).value = b.cantidad;
+                ws.getCell(`E${fila}`).value = b.numero_identificacion;
+                ws.getCell(`F${fila}`).value = b.estado;
+                ws.getCell(`G${fila}`).value = b.nombre;
+                ws.getCell(`H${fila}`).value = b.costo;
+                ws.getCell(`I${fila}`).value = b.cantidad * b.costo;
+                fila++;
+            }
 
-        let fila = 15;
-        for (const b of bienes) {
-            ws.getCell(`A${fila}`).value = b.grupo;
-            ws.getCell(`B${fila}`).value = b.subgrupo;
-            ws.getCell(`C${fila}`).value = b.seccion;
-            ws.getCell(`D${fila}`).value = b.cantidad;
-            ws.getCell(`E${fila}`).value = b.numero_identificacion;
-            ws.getCell(`F${fila}`).value = b.estado;
-            ws.getCell(`G${fila}`).value = b.nombre;
-            ws.getCell(`H${fila}`).value = b.costo;
-            ws.getCell(`I${fila}`).value = b.cantidad * b.costo;
-            fila++;
+            // Archivo temporal .xlsx
+            const tmpXlsxPath = path.join(os.tmpdir(), `bitacora_${departamento.nombre}.xlsx`);
+            await workbook.xlsx.writeFile(tmpXlsxPath);
+
+            // 2. Convertir a PDF con ConvertAPI
+            const result = await convertapi.convert('pdf', {
+                File: tmpXlsxPath
+            }, 'xlsx');
+
+            // 3. Guardar PDF temporalmente
+            const tmpPdfPath = path.join(os.tmpdir(), `bitacora_${departamento.nombre}.pdf`);
+            await result.files[0].save(tmpPdfPath);
+
+            // 4. Enviar PDF al cliente
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=Bitacora_${departamento.nombre}.pdf`);
+            const fileStream = fs.createReadStream(tmpPdfPath);
+            fileStream.pipe(res);
+            fileStream.on('end', () => {
+                // 5. Limpiar archivos temporales
+                fs.unlink(tmpXlsxPath, () => { });
+                fs.unlink(tmpPdfPath, () => { });
+            });
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al generar la bitácora PDF');
         }
-
-        // Archivo temporal .xlsx
-        const tmpXlsxPath = path.join(os.tmpdir(), `bitacora_${departamento.nombre}.xlsx`);
-        await workbook.xlsx.writeFile(tmpXlsxPath);
-
-        // 2. Convertir a PDF con ConvertAPI
-        const result = await convertapi.convert('pdf', {
-            File: tmpXlsxPath
-        }, 'xlsx');
-
-        // 3. Guardar PDF temporalmente
-        const tmpPdfPath = path.join(os.tmpdir(), `bitacora_${departamento.nombre}.pdf`);
-        await result.files[0].save(tmpPdfPath);
-
-        // 4. Enviar PDF al cliente
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename=Bitacora_${departamento.nombre}.pdf`);
-        const fileStream = fs.createReadStream(tmpPdfPath);
-        fileStream.pipe(res);
-        fileStream.on('end', () => {
-            // 5. Limpiar archivos temporales
-            fs.unlink(tmpXlsxPath, () => {});
-            fs.unlink(tmpPdfPath, () => {});
-        });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Error al generar la bitácora PDF');
     }
-}
+
+
+    async exportarBitacora2021(req, res) {
+        try {
+            const { departamento_id } = req.body;
+            const departamento = await this.modelBienes.getDepartamentoById(departamento_id);
+            const bienes = await this.modelBienes.getBienesPorDepartamento(departamento_id);
+
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Exportó la bitácora del departamento ${departamento.nombre}`,
+                tabla_afectada: 'Ninguna'
+            });
+
+            const workbook = new Excel.Workbook();
+            await workbook.xlsx.readFile(path.resolve(__dirname, 'BM2_2021-hospital.xlsx'));
+            const ws = workbook.getWorksheet('enero');
+            let fila = 17;
+            for (const b of bienes) {
+                ws.getCell(`A${fila}`).value = b.grupo;
+                ws.getCell(`B${fila}`).value = b.subgrupo;
+                ws.getCell(`C${fila}`).value = b.seccion;
+                ws.getCell(`E${fila}`).value = b.cantidad;
+                ws.getCell(`F${fila}`).value = b.numero_identificacion;
+                ws.getCell(`G${fila}`).value = b.nombre + ' ' + b.marca;
+                ws.getCell(`H${fila}`).value = b.cantidad;
+                fila++;
+            }
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', `attachment; filename=Bitacora_${departamento.nombre}.xlsx`);
+            await workbook.xlsx.write(res);
+            res.end();
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al generar la bitácora');
+        }
+    }
+
+    async exportarBitacora2021PDF(req, res) {
+        try {
+            const { departamento_id } = req.body;
+            const departamento = await this.modelBienes.getDepartamentoById(departamento_id);
+            const bienes = await this.modelBienes.getBienesPorDepartamento(departamento_id);
+
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Exportó la bitácora del departamento ${departamento.nombre}`,
+                tabla_afectada: 'Ninguna'
+            });
+
+            const workbook = new Excel.Workbook();
+            await workbook.xlsx.readFile(path.resolve(__dirname, 'BM2_2021-hospital.xlsx'));
+            const ws = workbook.getWorksheet('enero');
+            let fila = 17;
+            for (const b of bienes) {
+                ws.getCell(`A${fila}`).value = b.grupo;
+                ws.getCell(`B${fila}`).value = b.subgrupo;
+                ws.getCell(`C${fila}`).value = b.seccion;
+                ws.getCell(`E${fila}`).value = b.cantidad;
+                ws.getCell(`F${fila}`).value = b.numero_identificacion;
+                ws.getCell(`G${fila}`).value = b.nombre + ' ' + b.marca;
+                ws.getCell(`H${fila}`).value = b.cantidad;
+                fila++;
+            }
+
+
+            const tmpXlsxPath = path.join(os.tmpdir(), `bitacora_${departamento.nombre}.xlsx`);
+            await workbook.xlsx.writeFile(tmpXlsxPath);
+            const result = await convertapi.convert('pdf', {
+                File: tmpXlsxPath
+            }, 'xlsx');
+
+            const tmpPdfPath = path.join(os.tmpdir(), `bitacora_${departamento.nombre}.pdf`);
+            await result.files[0].save(tmpPdfPath);
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=Bitacora-BM2_${departamento.nombre}.pdf`);
+            const fileStream = fs.createReadStream(tmpPdfPath);
+            fileStream.pipe(res);
+            fileStream.on('end', () => {
+                fs.unlink(tmpXlsxPath, () => { });
+                fs.unlink(tmpPdfPath, () => { });
+            });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al generar la bitácora');
+        }
+    }
+
+
+    async exportarBitacora2017(req, res) {
+        try {
+            const { departamento_id } = req.body;
+            const departamento = await this.modelBienes.getDepartamentoById(departamento_id);
+            const bienes = await this.modelBienes.getBienesPorDepartamento(departamento_id);
+
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Exportó la bitácora del departamento ${departamento.nombre}`,
+                tabla_afectada: 'Ninguna'
+            });
+
+            const workbook = new Excel.Workbook();
+            await workbook.xlsx.readFile(path.resolve(__dirname, 'BM3_2017-hospital.xlsx'));
+            const ws = workbook.getWorksheet('Hoja1');
+            let fila = 18;
+            for (const b of bienes) {
+                ws.getCell(`A${fila}`).value = b.grupo;
+                ws.getCell(`B${fila}`).value = b.subgrupo;
+                ws.getCell(`C${fila}`).value = b.seccion;
+                ws.getCell(`E${fila}`).value = b.nombre + ' ' + b.marca;
+                ws.getCell(`H${fila}`).value = b.costo;
+                ws.getCell(`I${fila}`).value = b.cantidad;
+                fila++;
+            }
+
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', `attachment; filename=Bitacora_${departamento.nombre}.xlsx`);
+            await workbook.xlsx.write(res);
+            res.end();
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al generar la bitácora');
+        }
+    }
+
+    
+    async exportarBitacora2017PDF(req, res) {
+        try {
+            const { departamento_id } = req.body;
+            const departamento = await this.modelBienes.getDepartamentoById(departamento_id);
+            const bienes = await this.modelBienes.getBienesPorDepartamento(departamento_id);
+
+            await this.modelBienes.registrar({
+                usuario_cedula: req.user.cedula,
+                usuario_nombre: req.user.nombre,
+                usuario_rol: req.user.rol,
+                accion: `Exportó la bitácora del departamento ${departamento.nombre}`,
+                tabla_afectada: 'Ninguna'
+            });
+
+            const workbook = new Excel.Workbook();
+            await workbook.xlsx.readFile(path.resolve(__dirname, 'BM3_2017-hospital.xlsx'));
+            const ws = workbook.getWorksheet('Hoja1');
+            let fila = 18;
+            for (const b of bienes) {
+                ws.getCell(`A${fila}`).value = b.grupo;
+                ws.getCell(`B${fila}`).value = b.subgrupo;
+                ws.getCell(`C${fila}`).value = b.seccion;
+                ws.getCell(`E${fila}`).value = b.nombre + ' ' + b.marca;
+                ws.getCell(`H${fila}`).value = b.costo;
+                ws.getCell(`I${fila}`).value = b.cantidad;
+                fila++;
+            }
+
+            const tmpXlsxPath = path.join(os.tmpdir(), `bitacora_${departamento.nombre}.xlsx`);
+            await workbook.xlsx.writeFile(tmpXlsxPath);
+            const result = await convertapi.convert('pdf', {
+                File: tmpXlsxPath
+            }, 'xlsx');
+
+            const tmpPdfPath = path.join(os.tmpdir(), `bitacora_${departamento.nombre}.pdf`);
+            await result.files[0].save(tmpPdfPath);
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename=Bitacora-BM3_${departamento.nombre}.pdf`);
+            const fileStream = fs.createReadStream(tmpPdfPath);
+            fileStream.pipe(res);
+            fileStream.on('end', () => {
+                fs.unlink(tmpXlsxPath, () => { });
+                fs.unlink(tmpPdfPath, () => { });
+            });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Error al generar la bitácora');
+        }
+    }
+
 
 }
 
