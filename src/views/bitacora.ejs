@@ -79,157 +79,145 @@
         </aside>
 
         <main class="ml-64 p-8 w-full">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">
-                    <i class="fas fa-file-excel mr-2 text-green-600"></i>
-                    Generar Reporte BM-1
-                </h1>
+            <h1 class="text-3xl font-semibold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-file mr-2 text-green-600"></i> Reportes
+            </h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- === Reporte BM-1 === -->
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-file-excel mr-2 text-green-600"></i> Generar Reporte BM-1
+                        </h2>
 
-                <!-- Botón de Ayuda -->
-                <button onclick="showReportHelp()"
-                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
-                    title="Ver información del reporte">
-                    <i class="fas fa-question-circle mr-2"></i>
-                    Ayuda
-                </button>
-            </div>
+                        <!-- Formulario Excel -->
+                        <form action="/bitacora/generar-excel" method="POST" class="mb-4">
+                            <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
+                            <select name="departamento_id" class="w-full p-2 border rounded mb-3" required>
+                                <% departamentos.forEach(dpto=> { %>
+                                    <option value="<%= dpto.id %>">
+                                        <%= dpto.nombre %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <button type="submit"
+                                class="bg-green-500 text-white w-full py-2 rounded hover:bg-green-600">
+                                <i class="fas fa-file-excel mr-2"></i> Generar Excel
+                            </button>
+                        </form>
 
-            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-                <form action="/bitacora/generar-excel" method="POST">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
-                        <select name="departamento_id" class="w-full p-2 border rounded" required>
-                            <% departamentos.forEach(dpto=> { %>
-                                <option value="<%= dpto.id %>">
-                                    <%= dpto.nombre %>
-                                </option>
-                                <% }) %>
-                        </select>
+                        <!-- Formulario PDF -->
+                        <form action="/bitacora/generar-pdf" method="POST">
+                            <select name="departamento_id" class="w-full p-2 border rounded mb-3" required>
+                                <% departamentos.forEach(dpto=> { %>
+                                    <option value="<%= dpto.id %>">
+                                        <%= dpto.nombre %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <button type="submit" class="bg-red-500 text-white w-full py-2 rounded hover:bg-red-600">
+                                <i class="fas fa-file-pdf mr-2"></i> Generar PDF
+                            </button>
+                        </form>
                     </div>
 
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                        <i class="fas fa-file-excel mr-2"></i>
-                        Generar Reporte Excel
+                    <!-- Ayuda -->
+                    <button onclick="showReportHelp()"
+                        class="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-question-circle mr-2"></i> Ayuda
                     </button>
-                </form>
-                <form action="/bitacora/generar-pdf" method="POST">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
-                        <select name="departamento_id" class="w-full p-2 border rounded" required>
-                            <% departamentos.forEach(dpto=> { %>
-                                <option value="<%= dpto.id %>">
-                                    <%= dpto.nombre %>
-                                </option>
-                                <% }) %>
-                        </select>
+                </div>
+
+                <!-- === Reporte BM-2 === -->
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-file-excel mr-2 text-green-600"></i> Generar Reporte BM-2
+                        </h2>
+
+                        <!-- Formulario Excel -->
+                        <form action="/bitacora/generar-excel-2021" method="POST" class="mb-4">
+                            <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
+                            <select name="departamento_id" class="w-full p-2 border rounded mb-3" required>
+                                <% departamentos.forEach(dpto=> { %>
+                                    <option value="<%= dpto.id %>">
+                                        <%= dpto.nombre %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <button type="submit"
+                                class="bg-green-500 text-white w-full py-2 rounded hover:bg-green-600">
+                                <i class="fas fa-file-excel mr-2"></i> Generar Excel
+                            </button>
+                        </form>
+
+                        <!-- Formulario PDF -->
+                        <form action="/bitacora/generar-pdf-2021" method="POST">
+                            <select name="departamento_id" class="w-full p-2 border rounded mb-3" required>
+                                <% departamentos.forEach(dpto=> { %>
+                                    <option value="<%= dpto.id %>">
+                                        <%= dpto.nombre %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <button type="submit" class="bg-red-500 text-white w-full py-2 rounded hover:bg-red-600">
+                                <i class="fas fa-file-pdf mr-2"></i> Generar PDF
+                            </button>
+                        </form>
                     </div>
 
-                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                        <i class="fas fa-file-pdf mr-2"></i>
-                        Generar Reporte PDF
+                    <button onclick="showReportHelp()"
+                        class="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-question-circle mr-2"></i> Ayuda
                     </button>
-                </form>
-            </div>
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-800">
-                    <i class="fas fa-file-excel mr-2 text-green-600"></i>
-                    Generar Reporte BM-2
-                </h1>
+                </div>
 
-                <!-- Botón de Ayuda -->
-                <button onclick="showReportHelp()"
-                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center" 
-                    title="Ver información del reporte">
-                    <i class="fas fa-question-circle mr-2"></i>
-                    Ayuda
-                </button>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <form action="/bitacora/generar-excel-2021" method="POST">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
-                        <select name="departamento_id" class="w-full p-2 border rounded" required>
-                            <% departamentos.forEach(dpto=> { %>
-                                <option value="<%= dpto.id %>">
-                                    <%= dpto.nombre %>
-                                </option>
-                                <% }) %>
-                        </select>
+                <!-- === Reporte BM-3 === -->
+                <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                            <i class="fas fa-file-excel mr-2 text-green-600"></i> Generar Reporte BM-3
+                        </h2>
+
+                        <!-- Formulario Excel -->
+                        <form action="/bitacora/generar-excel-2017" method="POST" class="mb-4">
+                            <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
+                            <select name="departamento_id" class="w-full p-2 border rounded mb-3" required>
+                                <% departamentos.forEach(dpto=> { %>
+                                    <option value="<%= dpto.id %>">
+                                        <%= dpto.nombre %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <button type="submit"
+                                class="bg-green-500 text-white w-full py-2 rounded hover:bg-green-600">
+                                <i class="fas fa-file-excel mr-2"></i> Generar Excel
+                            </button>
+                        </form>
+
+                        <!-- Formulario PDF -->
+                        <form action="/bitacora/generar-pdf-2017" method="POST">
+                            <select name="departamento_id" class="w-full p-2 border rounded mb-3" required>
+                                <% departamentos.forEach(dpto=> { %>
+                                    <option value="<%= dpto.id %>">
+                                        <%= dpto.nombre %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <button type="submit" class="bg-red-500 text-white w-full py-2 rounded hover:bg-red-600">
+                                <i class="fas fa-file-pdf mr-2"></i> Generar PDF
+                            </button>
+                        </form>
                     </div>
 
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                        <i class="fas fa-file-excel mr-2"></i>
-                        Generar Reporte Excel
+                    <button onclick="showReportHelp()"
+                        class="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-question-circle mr-2"></i> Ayuda
                     </button>
-                </form>
-                <form action="/bitacora/generar-pdf-2021" method="POST">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
-                        <select name="departamento_id" class="w-full p-2 border rounded" required>
-                            <% departamentos.forEach(dpto=> { %>
-                                <option value="<%= dpto.id %>">
-                                    <%= dpto.nombre %>
-                                </option>
-                                <% }) %>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                        <i class="fas fa-file-pdf mr-2"></i>
-                        Generar Reporte PDF
-                    </button>
-                </form>
-            </div>
-            <div class="flex justify-between items-center mb-6 mt-6">
-                <h1 class="text-2xl font-bold text-gray-800">
-                    <i class="fas fa-file-excel mr-2 text-green-600"></i>
-                    Generar Reporte BM-3
-                </h1>
-
-                <button onclick="showReportHelp()"
-                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center"
-                    title="Ver información del reporte">
-                    <i class="fas fa-question-circle mr-2"></i>
-                    Ayuda
-                </button>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <form action="/bitacora/generar-excel-2017" method="POST">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
-                        <select name="departamento_id" class="w-full p-2 border rounded" required>
-                            <% departamentos.forEach(dpto=> { %>
-                                <option value="<%= dpto.id %>">
-                                    <%= dpto.nombre %>
-                                </option>
-                                <% }) %>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-                        <i class="fas fa-file-excel mr-2"></i>
-                        Generar Reporte Excel
-                    </button>
-                </form>
-                <form action="/bitacora/generar-pdf-2017" method="POST">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 mb-2">Seleccionar Departamento:</label>
-                        <select name="departamento_id" class="w-full p-2 border rounded" required>
-                            <% departamentos.forEach(dpto=> { %>
-                                <option value="<%= dpto.id %>">
-                                    <%= dpto.nombre %>
-                                </option>
-                                <% }) %>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                        <i class="fas fa-file-pdf mr-2"></i>
-                        Generar Reporte PDF
-                    </button>
-                </form>
+                </div>
             </div>
         </main>
+
 
         <!-- Modal de Ayuda para Reporte BM-1 -->
         <div id="reportHelpModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
